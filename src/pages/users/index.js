@@ -58,7 +58,7 @@ export default function Users() {
             color="primary"
             variant="contained"
             onClick={() => {
-              //navigate("/addCutomer");
+              navigate("add");
             }}>
             Add new user
           </Button>
