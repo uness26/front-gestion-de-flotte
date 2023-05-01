@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getVehicules, deleteVehicule } from '../../api/vehicules';
+import { getMissions, deleteMission } from '../../api/missions';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -15,14 +15,14 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 
-export default function Vehicules() {
-  const [listVehicules, setListVehicules] = useState([]);
+export default function Missions() {
+  const [listMissions, setListMissions] = useState([]);
   const navigate = useNavigate()
 
   useEffect(() => {
-    getVehicules()
+    getMissions()
       .then((response) => {
-        setListVehicules(response.data)
+        setListMissions(response.data)
         console.log(response.data)
       })
       .catch((error) => (
@@ -32,8 +32,8 @@ export default function Vehicules() {
 
   const handleDelete = async (id) => {
     try {
-      await deleteVehicule(id);
-      setListVehicules(listVehicules.filter((vehicule) => vehicule.id !== id));
+      await deleteMission(id);
+      setListMissions(listMissions.filter((mission) => mission.id !== id));
     } catch (err) {
       console.log(err);
     }
@@ -51,7 +51,7 @@ export default function Vehicules() {
         }}
       >
         <Typography sx={{ m: 1 }} variant="h4">
-          Vehicules
+          Missions
         </Typography>
         <Box sx={{ m: 1 }}>
           <Button
@@ -60,7 +60,7 @@ export default function Vehicules() {
             onClick={() => {
               //navigate("/addCutomer");
             }}>
-            Add new vehicule
+            Add new mission
           </Button>
         </Box>
       </Box>
@@ -72,16 +72,18 @@ export default function Vehicules() {
                 <Checkbox />
               </TableCell>
               <TableCell> ID</TableCell>
-              <TableCell align="right">Type</TableCell>
-              <TableCell align="right">Marque</TableCell>
-              <TableCell align="right">Immatricule</TableCell>
-              <TableCell align="right">Volume</TableCell>
+              <TableCell align="right">Date</TableCell>
+              <TableCell align="right">Lieu de départ</TableCell>
+              <TableCell align="right">Lieu d'arrivée</TableCell>
+              <TableCell align="right">Etat</TableCell>
+              <TableCell align="right">Chauffeur</TableCell>
+              <TableCell align="right">Véhicule</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {listVehicules.map((vehicule) => (
+            {listMissions.map((mission) => (
               <TableRow
-                key={vehicule._id}
+                key={mission._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell padding="checkbox">
                   <Checkbox
@@ -89,19 +91,21 @@ export default function Vehicules() {
                   />
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {vehicule._id}
+                  {mission._id}
                 </TableCell>
-                <TableCell align="right">{vehicule.type}</TableCell>
-                <TableCell align="right">{vehicule.marque}</TableCell>
-                <TableCell align="right">{vehicule.immatricule}</TableCell>
-                <TableCell align="right">{vehicule.volume}</TableCell>
+                <TableCell align="right">{mission.date}</TableCell>
+                <TableCell align="right">{mission.lieuDep}</TableCell>
+                <TableCell align="right">{mission.lieuArr}</TableCell>
+                <TableCell align="right">{mission.etat}</TableCell>
+                <TableCell align="right">{mission.chauffeur}</TableCell>
+                <TableCell align="right">{mission.vehicule}</TableCell>
                 <TableCell align="right">
                   <IconButton
                     aria-label="edit"
                     size="medium"
                     onClick={() => {
-                      const idVehicule = vehicule.id.toString()
-                      //navigate(`/editVehicule/:${idVehicule}`)
+                      const idMission = mission.id.toString()
+                      //navigate(`/editMission/:${idMission}`)
                     }}>
                     <Edit />
                   </IconButton>
@@ -109,7 +113,7 @@ export default function Vehicules() {
                     aria-label="delete"
                     size="medium"
                     onClick={async () => {
-                      await handleDelete(vehicule.id)
+                      await handleDelete(mission.id)
                     }}>
                     <Delete />
                   </IconButton>
