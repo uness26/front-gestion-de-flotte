@@ -99,8 +99,8 @@ export default function Users() {
                     aria-label="edit"
                     size="medium"
                     onClick={() => {
-                      const idUser = user.id.toString()
-                      //navigate(`/editUser/:${idUser}`)
+                      const idUser = user._id.toString()
+                      navigate(`/users/edit/:${idUser}`)
                     }}>
                     <Edit />
                   </IconButton>
