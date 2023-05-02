@@ -41,7 +41,7 @@ export default function AddUser() {
     createUser(user)
         .then((res) => {
         console.log(res);
-        navigate("/");
+        navigate("/users");
         })
         .catch((err) => console.log(err));
     };

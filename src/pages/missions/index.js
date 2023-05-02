@@ -58,7 +58,7 @@ export default function Missions() {
             color="primary"
             variant="contained"
             onClick={() => {
-              //navigate("/addCutomer");
+              navigate("/missions/add");
             }}>
             Add new mission
           </Button>
@@ -104,8 +104,7 @@ export default function Missions() {
                     aria-label="edit"
                     size="medium"
                     onClick={() => {
-                      const idMission = mission.id.toString()
-                      //navigate(`/editMission/:${idMission}`)
+                      navigate(`/missions/edit/${mission._id}`)
                     }}>
                     <Edit />
                   </IconButton>

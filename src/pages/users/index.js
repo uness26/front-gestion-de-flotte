@@ -33,7 +33,7 @@ export default function Users() {
   const handleDelete = async (id) => {
     try {
       await deleteUser(id);
-      setListUsers(listUsers.filter((user) => user.id !== id));
+      setListUsers(listUsers.filter((user) => user._id !== id));
     } catch (err) {
       console.log(err);
     }
@@ -75,7 +75,8 @@ export default function Users() {
               <TableCell align="right">First Name</TableCell>
               <TableCell align="right">Last Name</TableCell>
               <TableCell align="right">Email</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell align="right">CIN</TableCell>
+              <TableCell align="right">Phone</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -94,13 +95,14 @@ export default function Users() {
                 <TableCell align="right">{user.nom}</TableCell>
                 <TableCell align="right">{user.prenom}</TableCell>
                 <TableCell align="right">{user.email}</TableCell>
+                <TableCell align="right">{user.CIN}</TableCell>
+                <TableCell align="right">{user.tel}</TableCell>
                 <TableCell align="right">
                   <IconButton
                     aria-label="edit"
                     size="medium"
                     onClick={() => {
-                      const idUser = user._id.toString()
-                      navigate(`/users/edit/:${idUser}`)
+                      navigate(`/users/edit/${user._id}`)
                     }}>
                     <Edit />
                   </IconButton>
@@ -108,7 +110,7 @@ export default function Users() {
                     aria-label="delete"
                     size="medium"
                     onClick={async () => {
-                      await handleDelete(user.id)
+                      await handleDelete(user._id)
                     }}>
                     <Delete />
                   </IconButton>

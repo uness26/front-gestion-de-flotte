@@ -58,7 +58,7 @@ export default function Vehicules() {
             color="primary"
             variant="contained"
             onClick={() => {
-              //navigate("/addCutomer");
+              navigate("/vehicules/add");
             }}>
             Add new vehicule
           </Button>
@@ -100,8 +100,7 @@ export default function Vehicules() {
                     aria-label="edit"
                     size="medium"
                     onClick={() => {
-                      const idVehicule = vehicule.id.toString()
-                      //navigate(`/editVehicule/:${idVehicule}`)
+                      navigate(`/vehicules/edit/${vehicule._id}`)
                     }}>
                     <Edit />
                   </IconButton>
