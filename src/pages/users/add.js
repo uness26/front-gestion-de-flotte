@@ -29,12 +29,6 @@ export default function AddUser() {
     }
 
     const handleChange = (event) => {
-    if(event.target.name === "CIN"){
-        if(!validateCin) {
-            alert("Invalid CIN")
-            return 
-        }
-    }
     setUser({
         ...user,
         [event.target.name]: event.target.value
@@ -43,6 +37,7 @@ export default function AddUser() {
   
     const handleSubmit = (event ) => {
     event.preventDefault();
+    console.log(user)
     createUser(user)
         .then((res) => {
         console.log(res);
@@ -74,22 +69,22 @@ export default function AddUser() {
                                     <TextField
                                         fullWidth
                                         helperText="Please specify the first name"
-                                        label="First name"
-                                        name="name"
+                                        label="Nom"
+                                        name="nom"
                                         onChange={handleChange}
                                         required
-                                        value={user.firstName}
+                                        value={user.nom}
                                         variant="outlined"
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
                                     <TextField
                                         fullWidth
-                                        label="Last name"
+                                        label="Prénom"
                                         name="prenom"
                                         onChange={handleChange}
                                         required
-                                        value={user.lastName}
+                                        value={user.prenom}
                                         variant="outlined"
                                     />
                                 </Grid>
@@ -98,6 +93,7 @@ export default function AddUser() {
                                         fullWidth
                                         label="Phone"
                                         name="tel"
+                                        type="number"
                                         onChange={handleChange}
                                         required
                                         value={user.tel}
@@ -109,6 +105,7 @@ export default function AddUser() {
                                         fullWidth
                                         label="CIN"
                                         name="CIN"
+                                        type="number"
                                         onChange={handleChange}
                                         required
                                         value={user.CIN}
@@ -148,7 +145,7 @@ export default function AddUser() {
                                             onChange={handleChange}
                                         >
                                             <FormControlLabel value="ADMIN" control={<Radio />} label="Admin" />
-                                            <FormControlLabel value="USER" control={<Radio />} label="User" />
+                                            <FormControlLabel value="CHAUFFEUR" control={<Radio />} label="Chauffeur" />
                                         </RadioGroup>
                                     </FormControl>
                                 </Grid>
@@ -162,7 +159,8 @@ export default function AddUser() {
                             p: 2,
                         }}
                         >
-                            <Button color="primary" variant="contained" type="submit">
+                            <Button color="primary" variant="contained" type="submit" onClick={handleSubmit}>
+
                                 Save
                             </Button>
                         </Box>
