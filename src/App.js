@@ -3,6 +3,7 @@ import Login  from './pages/login';
 import Vehicules from './pages/vehicules';
 import Users from './pages/users';
 import Missions from './pages/missions';
+import Reclamations from './pages/reclamations';
 import AddUser from './pages/users/add';
 import EditUser from './pages/users/edit';
 import AddVehicule from './pages/vehicules/add';
@@ -25,6 +26,7 @@ function App() {
           <Route path="/vehicules/add" element={<AddVehicule/>}/>
           <Route path="/missions" element={<Missions/>}/>
           <Route path="/missions/add" element={<AddMission/>}/>
+          <Route path="/reclamations" element={<Reclamations/>}/>
         </Routes>
       </Router>
   );
