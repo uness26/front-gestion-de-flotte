@@ -14,8 +14,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import { Layout } from "../../layout/layout";
 
-export default function Users() {
+function Users() {
   const [listUsers, setListUsers] = useState([]);
   const navigate = useNavigate()
 
@@ -50,7 +51,7 @@ export default function Users() {
           m: -1,
         }}
       >
-        <Typography sx={{ m: 1 }} variant="h4">
+        <Typography sx={{ m: 1, margin:'1rem' }} variant="h4">
           Users
         </Typography>
         <Box sx={{ m: 1 }}>
@@ -123,3 +124,6 @@ export default function Users() {
     </>
   )
 }
+Users.getLayout = (page) => <Layout>{page}</Layout>;
+
+export default Users;

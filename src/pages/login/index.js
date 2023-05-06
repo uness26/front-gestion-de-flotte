@@ -1,49 +1,104 @@
 import React from 'react'
-import Button from '@mui/material/Button';
+import * as Yup from "yup";
 import { useNavigate } from 'react-router-dom';
+import { useFormik } from "formik";
+import { Box, Button, Container, Grid, TextField, Typography } from "@mui/material";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Login() {
   const navigate = useNavigate()
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+      password: Yup.string().max(255).required("Password is required"),
+    }),
+    onSubmit: async (value) => {
+      try {
+        //await login(value);
+        navigate("/");
+      } catch (err) {
+        toast.error("Invalid crediantials, please try again");
+      }
+    },
+  });
+
   return (
-   
-    <div>
-     <h1>Login</h1>
-    
-      <Button
-        color="primary"
-        variant="contained"
-        onClick={() => {
-          navigate("/users");
-        } }>
-        Chaufeurs
-      </Button>
-
-      <Button
-      color="primary"
-      variant="contained"
-      onClick={() => {
-        navigate("/vehicules");
-      } }>
-      Véhicules
-    </Button>
-
-    <Button
-    color="primary"
-    variant="contained"
-    onClick={() => {
-      navigate("/missions");
-    } }>
-    Missions
-  </Button>
-
-  <Button
-  color="primary"
-  variant="contained"
-  onClick={() => {
-    navigate("/reclamations");
-  } }>
-  Réclamations
-</Button>
-  </div>
+    <>
+      <Box
+        component="main"
+        sx={{
+          alignItems: "center",
+          display: "flex",
+          flexGrow: 1,
+          minHeight: "100%",
+        }}
+      >
+        <Container maxWidth="sm">
+          <form onSubmit={formik.handleSubmit}>
+            <Box sx={{ my: 3 }}>
+              <Typography color="textPrimary" variant="h4">
+                Sign in
+              </Typography>
+              <Typography color="textSecondary" gutterBottom variant="body2">
+                Sign in
+              </Typography>
+            </Box>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}></Grid>
+              <Grid item xs={12} md={6}></Grid>
+            </Grid>
+            <Box
+              sx={{
+                pb: 1,
+                pt: 3,
+              }}
+            ></Box>
+            <TextField
+              error={Boolean(formik.touched.email && formik.errors.email)}
+              fullWidth
+              helperText={formik.touched.email && formik.errors.email}
+              label="Email Address"
+              margin="normal"
+              name="email"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type="email"
+              value={formik.values.email}
+              variant="outlined"
+            />
+            <TextField
+              error={Boolean(formik.touched.password && formik.errors.password)}
+              fullWidth
+              helperText={formik.touched.password && formik.errors.password}
+              label="Password"
+              margin="normal"
+              name="password"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type="password"
+              value={formik.values.password}
+              variant="outlined"
+            />
+            <Box sx={{ py: 2 }}>
+              <Button
+                color="primary"
+                disabled={formik.isSubmitting}
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+              >
+                Sign In Now
+              </Button>
+            </Box>
+          </form>
+        </Container>
+      </Box>
+      <Toaster />
+    </>
   )
 }
