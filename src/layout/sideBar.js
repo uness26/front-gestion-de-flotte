@@ -35,11 +35,6 @@ const items = [
     icon: (<UserIcon fontSize="small" />),
     title: 'Profil'
   },
-  {
-    href: '/login',
-    icon: (<LockIcon fontSize="small" />),
-    title: 'Login'
-  },
 ];
 
 export const Sidebar = (props) => {
