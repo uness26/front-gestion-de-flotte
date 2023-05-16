@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { Box, Container, Typography } from "@mui/material";
+import Container from '@mui/material/Container'
+import Typography from '@mui/material/Typography'
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from 'react'
+import { updateMission, getMissionById } from '../../api/missions';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import { createMission } from "../../api/missions";
 import { DateField } from '@mui/x-date-pickers/DateField';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -19,13 +22,14 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
-export default function AddMission() {
-    const navigate = useNavigate();
+export default function EditMission() {
+    const { id } = useParams();
+    const [mission, setMission] = useState({});
     const [vehicules, setVehicules] = useState([]);
     const [chauffeurs, setChaffeurs] = useState([]);
-    const [mission, setMission] = useState({});
+    const navigate = useNavigate();
     const [date, setDate] = useState(
-        dayjs('2014-08-18T21:11:54'),
+        dayjs(mission?.date),
     );
 
     useEffect(() => {
@@ -55,28 +59,47 @@ export default function AddMission() {
         console.log(mission)
     };
 
+    useEffect(() => {
+        getMissionById(id)
+            .then((response) => {
+                setMission(response.data)
+                console.log(response.data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+            console.log(mission)
+    }, [id]);
+
     const handleChange = (event) => {
         setMission({
             ...mission,
             [event.target.name]: event.target.value
-        });
+        })
         console.log(mission)
     }
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(mission)
-        createMission(mission)
+        const body = {
+            etat : mission.etat,
+            date : mission.date,
+            vehicule : mission.vehicule,
+            chauffeur : mission.chauffeur,
+            lieuDep : mission.lieuDep,
+            lieuArr : mission.lieuArr,
+        }
+        updateMission(id,body)
             .then((res) => {
-                console.log(res);
-                navigate("/missions");
+                console.log(res)
+                navigate("/missions")
             })
             .catch((err) => console.log(err));
     };
 
     return (
         <>
-            <title> AddMission </title>
+            <title> EditMission </title>
             <Box
                 component="main"
                 sx={{
@@ -85,7 +108,7 @@ export default function AddMission() {
                 }}>
                 <Container maxWidth="lg">
                     <Typography sx={{ mb: 3 }} variant="h4">
-                        Add Mission
+                        Edit Mission
                     </Typography>
                     <form autoComplete="off" onSubmit={handleSubmit}>
                         <Card>
@@ -94,62 +117,47 @@ export default function AddMission() {
                             <CardContent>
                                 <Grid container spacing={3}>
                                     <Grid item md={6} xs={12}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs} >
-                                            <DateField
-                                                label="Date"
-                                                inputFormat="dd/MM/yyyy"
-                                                name="date"
-                                                value={mission.date}
-                                                required
-                                                onChange={handleChangeDate}
-                                                variant="outlined"
-                                                fullWidth
-                                            />
-                                        </LocalizationProvider>
-                                    </Grid>
-                                    <Grid item md={6} xs={12}>
+                                    <InputLabel id="label">Lieu de départ</InputLabel>
                                         <TextField
                                             fullWidth
-                                            label="Lieu de départ"
                                             name="lieuDep"
                                             onChange={handleChange}
                                             required
-                                            value={mission.lieuDep}
+                                            value={mission?.lieuDep}
                                             variant="outlined"
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
+                                    <InputLabel id="label">Lieu de Destination</InputLabel>
                                         <TextField
                                             fullWidth
-                                            label="Lieu d'arrivée"
                                             name="lieuArr"
                                             onChange={handleChange}
                                             required
-                                            value={mission.lieuArr}
+                                            value={mission?.lieuArr}
                                             variant="outlined"
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
+                                    <InputLabel id="label">etat</InputLabel>
                                         <TextField
                                             fullWidth
-                                            label="Etat"
                                             name="etat"
                                             onChange={handleChange}
                                             required
-                                            value={mission.etat}
+                                            value={mission?.etat}
                                             variant="outlined"
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
-                                        <InputLabel id="label">Chauffeur</InputLabel>
+                                    <InputLabel id="label">Chauffeur</InputLabel>
                                         <Select
                                             labelId="label"
                                             id="select"
                                             name="chauffeur"
                                             fullWidth
                                             onChange={handleChange}
-                                            value={chauffeurs.find((chauffeur) => chauffeur?._id == mission?.chaffeur)?._id}
-                                            label="Chauffeur"
+                                            value={mission?.chauffeur ? mission?.chauffeur : ""}
                                         >
                                             {chauffeurs.map((chauffeur) => (
                                                 <MenuItem value={chauffeur?._id}>{chauffeur?.nom} {chauffeur?.prenom}</MenuItem>
@@ -157,24 +165,36 @@ export default function AddMission() {
                                         </Select>
                                     </Grid>
                                     <Grid item md={6} xs={12}>
-                                        <InputLabel id="label">Vehicule</InputLabel>
+                                    <InputLabel id="label">Vehicule</InputLabel>
                                         <Select
                                             labelId="label"
                                             id="select"
                                             name="vehicule"
                                             fullWidth
                                             onChange={handleChange}
-                                            value={vehicules?.find((vehicule) => vehicule?._id == mission?.vehicule)?._id}
-                                            label="Vehicule"
+                                            value={mission?.vehicule ? mission?.vehicule : ""}
                                         >
                                             {vehicules?.map((vehicule) => (
                                                 <MenuItem value={vehicule?._id}>{vehicule?.type} {vehicule?.marque} </MenuItem>
                                             ))}
                                         </Select>
                                     </Grid>
+                                    <Grid item md={6} xs={12}>
+                                    <InputLabel id="label">Date</InputLabel>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} >
+                                            <DateField
+                                                format="DD/MM/YYYY"
+                                                name="date"
+                                                value={dayjs(mission?.date)}
+                                                required
+                                                onChange={handleChangeDate}
+                                                variant="outlined"
+                                                fullWidth
+                                            />
+                                        </LocalizationProvider>
+                                    </Grid>
                                 </Grid>
                             </CardContent>
-
                             <Divider />
                             <Box
                                 sx={{
@@ -184,7 +204,6 @@ export default function AddMission() {
                                 }}
                             >
                                 <Button color="primary" variant="contained" type="submit" onClick={handleSubmit}>
-
                                     Save
                                 </Button>
                             </Box>

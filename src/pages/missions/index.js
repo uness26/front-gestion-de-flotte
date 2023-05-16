@@ -33,7 +33,7 @@ export default function Missions() {
   const handleDelete = async (id) => {
     try {
       await deleteMission(id);
-      setListMissions(listMissions.filter((mission) => mission.id !== id));
+      setListMissions(listMissions.filter((mission) => mission._id !== id));
     } catch (err) {
       console.log(err);
     }
@@ -71,13 +71,13 @@ export default function Missions() {
               <TableCell padding="checkbox">
                 <Checkbox />
               </TableCell>
-              <TableCell> ID</TableCell>
               <TableCell align="right">Date</TableCell>
               <TableCell align="right">Lieu de départ</TableCell>
               <TableCell align="right">Lieu d'arrivée</TableCell>
               <TableCell align="right">Etat</TableCell>
               <TableCell align="right">Chauffeur</TableCell>
               <TableCell align="right">Véhicule</TableCell>
+              <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -90,15 +90,12 @@ export default function Missions() {
                     value="true"
                   />
                 </TableCell>
-                <TableCell component="th" scope="row">
-                  {mission._id}
-                </TableCell>
                 <TableCell align="right">{mission.date}</TableCell>
                 <TableCell align="right">{mission.lieuDep}</TableCell>
                 <TableCell align="right">{mission.lieuArr}</TableCell>
                 <TableCell align="right">{mission.etat}</TableCell>
-                <TableCell align="right">{mission.chauffeur}</TableCell>
-                <TableCell align="right">{mission.vehicule}</TableCell>
+                <TableCell align="right">{mission.chauffeur?.nom} {mission.chauffeur?.prenom}</TableCell>
+                <TableCell align="right">{mission?.vehicule?.type} {mission.vehicule?.marque}</TableCell>
                 <TableCell align="right">
                   <IconButton
                     aria-label="edit"
@@ -112,7 +109,7 @@ export default function Missions() {
                     aria-label="delete"
                     size="medium"
                     onClick={async () => {
-                      await handleDelete(mission.id)
+                      await handleDelete(mission._id)
                     }}>
                     <Delete />
                   </IconButton>

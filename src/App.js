@@ -20,6 +20,7 @@ import {
 import { Sidebar } from './layout/sideBar';
 import { Navbar } from './layout/navBar';
 import Account from './pages/account';
+import EditMission from './pages/missions/edit';
 
 const SIDE_NAV_WIDTH = 280;
 
@@ -64,6 +65,7 @@ function App() {
                 <Route path="/vehicules" element={<Vehicules />} />
                 <Route path="/vehicules/add" element={<AddVehicule />} />
                 <Route path="/missions" element={<Missions />} />
+                <Route path="/missions/edit/:id" element={<EditMission />} />
                 <Route path="/missions/add" element={<AddMission />} />
                 <Route path="/reclamations" element={<Reclamations />} />
               </Routes>
