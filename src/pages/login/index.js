@@ -7,6 +7,8 @@ import toast, { Toaster } from "react-hot-toast";
 
 export default function Login() {
   const navigate = useNavigate()
+  
+  
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -18,8 +20,8 @@ export default function Login() {
     }),
     onSubmit: async (value) => {
       try {
-        //await login(value);
-        navigate("/");
+        //await Login(value);
+        navigate("/missions");
       } catch (err) {
         toast.error("Invalid crediantials, please try again");
       }
@@ -41,9 +43,6 @@ export default function Login() {
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography color="textPrimary" variant="h4">
-                Sign in
-              </Typography>
-              <Typography color="textSecondary" gutterBottom variant="body2">
                 Sign in
               </Typography>
             </Box>
