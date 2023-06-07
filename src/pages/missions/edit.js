@@ -12,15 +12,18 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import { DateField } from '@mui/x-date-pickers/DateField';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { getVehicules } from '../../api/vehicules';
 import { getUsers } from '../../api/users';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import { Sidebar } from '../../layout/sideBar';
+import { Navbar } from '../../layout/navBar';
 
 export default function EditMission() {
     const { id } = useParams();
@@ -28,9 +31,9 @@ export default function EditMission() {
     const [vehicules, setVehicules] = useState([]);
     const [chauffeurs, setChaffeurs] = useState([]);
     const navigate = useNavigate();
-    const [date, setDate] = useState(
-        dayjs(mission?.date),
-    );
+    const [date, setDate] = useState();
+    const [heureDep, setTime] = useState();
+
 
     useEffect(() => {
         getVehicules().then((response) => {
@@ -50,14 +53,10 @@ export default function EditMission() {
     useEffect(() => {
         setMission({
             ...mission,
-            date: date,
+            date,
+            heureDep,
         });
-    }, [date])
-
-    const handleChangeDate = (newValue) => {
-        setDate(newValue)
-        console.log(mission)
-    };
+    }, [date, heureDep])
 
     useEffect(() => {
         getMissionById(id)
@@ -68,28 +67,40 @@ export default function EditMission() {
             .catch((error) => {
                 console.error(error)
             })
-            console.log(mission)
+        console.log(mission)
     }, [id]);
+
+    const handleChangeDate = (newDate) => {
+        const date = newDate.toISOString().slice(0, 10);
+        setDate(date)
+    };
+
+    const handleChangeTime = (newTime) => {
+        const time = newTime.toISOString().split("T")[1].slice(0, 5)
+        setTime(time)
+        console.log(time)
+    };
 
     const handleChange = (event) => {
         setMission({
             ...mission,
             [event.target.name]: event.target.value
         })
-        console.log(mission)
     }
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const body = {
-            etat : mission.etat,
-            date : mission.date,
-            vehicule : mission.vehicule,
-            chauffeur : mission.chauffeur,
-            lieuDep : mission.lieuDep,
-            lieuArr : mission.lieuArr,
+            etat: mission.etat,
+            date: mission.date,
+            heureDep: mission.heureDep,
+            heureArr: mission.heureArr,
+            vehicule: mission.vehicule,
+            chauffeur: mission.chauffeur,
+            lieuDep: mission.lieuDep,
+            lieuArr: mission.lieuArr,
         }
-        updateMission(id,body)
+        updateMission(id, body)
             .then((res) => {
                 console.log(res)
                 navigate("/missions")
@@ -99,17 +110,17 @@ export default function EditMission() {
 
     return (
         <>
-            <title> EditMission </title>
+        <Navbar />
+        <Sidebar />
             <Box
                 component="main"
                 sx={{
                     flexGrow: 1,
                     py: 8,
                 }}>
+                <Navbar />
+                <Sidebar />
                 <Container maxWidth="lg">
-                    <Typography sx={{ mb: 3 }} variant="h4">
-                        Edit Mission
-                    </Typography>
                     <form autoComplete="off" onSubmit={handleSubmit}>
                         <Card>
                             <CardHeader subheader="The information can be edited" title="Mission" />
@@ -117,7 +128,33 @@ export default function EditMission() {
                             <CardContent>
                                 <Grid container spacing={3}>
                                     <Grid item md={6} xs={12}>
-                                    <InputLabel id="label">Lieu de départ</InputLabel>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} >
+                                            <DatePicker
+                                                label="Date"
+                                                format="DD/MM/YYYY"
+                                                name="date"
+                                                value={dayjs(mission?.date ? mission?.date : "")}
+                                                required
+                                                onChange={handleChangeDate}
+                                                fullWidth
+                                            />
+                                        </LocalizationProvider>
+                                    </Grid>
+                                    <Grid item md={6} xs={12}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} >
+                                            <TimePicker
+                                                label="Heure de départ"
+                                                format="hh:mm"
+                                                name="heureDep"
+                                                required
+                                                onChange={handleChangeTime}
+                                                variant="outlined"
+                                                fullWidth
+                                            />
+                                        </LocalizationProvider>
+                                    </Grid>
+                                    <Grid item md={6} xs={12}>
+                                        <InputLabel id="label">Lieu de départ</InputLabel>
                                         <TextField
                                             fullWidth
                                             name="lieuDep"
@@ -128,7 +165,7 @@ export default function EditMission() {
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
-                                    <InputLabel id="label">Lieu de Destination</InputLabel>
+                                        <InputLabel id="label">Lieu de Destination</InputLabel>
                                         <TextField
                                             fullWidth
                                             name="lieuArr"
@@ -139,33 +176,21 @@ export default function EditMission() {
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
-                                    <InputLabel id="label">etat</InputLabel>
-                                        <TextField
-                                            fullWidth
-                                            name="etat"
-                                            onChange={handleChange}
-                                            required
-                                            value={mission?.etat}
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} xs={12}>
-                                    <InputLabel id="label">Chauffeur</InputLabel>
+                                        <InputLabel id="label">Chauffeur</InputLabel>
                                         <Select
                                             labelId="label"
                                             id="select"
                                             name="chauffeur"
                                             fullWidth
                                             onChange={handleChange}
-                                            value={mission?.chauffeur ? mission?.chauffeur : ""}
-                                        >
+                                            defaultValue={mission.chaufeur ? mission.chaufeur : " "}                                        >
                                             {chauffeurs.map((chauffeur) => (
                                                 <MenuItem value={chauffeur?._id}>{chauffeur?.nom} {chauffeur?.prenom}</MenuItem>
                                             ))}
                                         </Select>
                                     </Grid>
                                     <Grid item md={6} xs={12}>
-                                    <InputLabel id="label">Vehicule</InputLabel>
+                                        <InputLabel id="label">Véhicule</InputLabel>
                                         <Select
                                             labelId="label"
                                             id="select"
@@ -178,20 +203,6 @@ export default function EditMission() {
                                                 <MenuItem value={vehicule?._id}>{vehicule?.type} {vehicule?.marque} </MenuItem>
                                             ))}
                                         </Select>
-                                    </Grid>
-                                    <Grid item md={6} xs={12}>
-                                    <InputLabel id="label">Date</InputLabel>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs} >
-                                            <DateField
-                                                format="DD/MM/YYYY"
-                                                name="date"
-                                                value={dayjs(mission?.date)}
-                                                required
-                                                onChange={handleChangeDate}
-                                                variant="outlined"
-                                                fullWidth
-                                            />
-                                        </LocalizationProvider>
                                     </Grid>
                                 </Grid>
                             </CardContent>

@@ -1,5 +1,12 @@
-import React,{useState} from 'react';
+import React, { useState, useEffect } from 'react';
+import { getUserProfile, updateUser } from '../../api/users';
+import { Sidebar } from '../../layout/sideBar';
+import { Navbar } from '../../layout/navBar';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 import {
+    InputLabel,
     Avatar,
     Box,
     Button,
@@ -15,69 +22,89 @@ import {
     Unstable_Grid2 as Grid
 } from '@mui/material';
 
-const user = {
-    avatar: '/assets/avatars/avatar-anika-visser.png',
-    city: 'Los Angeles',
-    country: 'USA',
-    jobTitle: 'Senior Developer',
-    name: 'Anika Visser',
-    timezone: 'GTM-7'
-};
-
 const AccountProfile = () => (
     <Card>
+        <Navbar />
+        <Sidebar />
         <CardContent>
             <Box
                 sx={{
+                    color: 'red',
+
                     alignItems: 'center',
                     display: 'flex',
                     flexDirection: 'column'
                 }}
             >
                 <Avatar
-                    src={user.avatar}
                     sx={{
                         height: 80,
                         mb: 2,
                         width: 80
                     }}
                 />
-                <Typography
-                    gutterBottom
-                    variant="h5"
-                >
-                    {user.name}
-                </Typography>
-                <Typography
-                    color="text.secondary"
-                    variant="body2"
-                >
-                    {user.city} {user.country}
-                </Typography>
-                <Typography
-                    color="text.secondary"
-                    variant="body2"
-                >
-                    {user.timezone}
-                </Typography>
+
             </Box>
         </CardContent>
-        <Divider />
         <CardActions>
             <Button
                 fullWidth
                 variant="text"
             >
-                Upload picture
+                Mettre à jour
             </Button>
         </CardActions>
     </Card>
 );
 
 const Account = () => {
-    const [values, setValues] = useState(user);
+    const [user, setUser] = useState(null);
+
+
+    useEffect(() => {
+        getUserProfile()
+            .then((response) => {
+                console.log(response)
+                setUser(response.data)
+            })
+            .catch((error) => (
+                console.error(error)
+            ))
+    }, [])
+
+
+
+
+    const handleChange = (event) => {
+        setUser({
+            ...user,
+            [event.target.name]: event.target.value
+        })
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const id = user._id
+        const body = {
+            nom: user.nom,
+            prenom: user.prenom,
+            CIN: user.CIN,
+            tel: user.tel,
+            password: user.password,
+            email: user.email,
+        }
+        updateUser(id, body)
+            .then((res) => {
+                console.log(res)
+                alert('Profile updeted')
+            })
+            .catch((err) => console.log(err));
+    };
+
+
     return (
         <>
+
             <Box
                 component="main"
                 sx={{
@@ -89,7 +116,7 @@ const Account = () => {
                     <Stack spacing={3}>
                         <div>
                             <Typography variant="h4">
-                                Account
+                                Profile Adminstrateur
                             </Typography>
                         </div>
                         <div>
@@ -102,7 +129,7 @@ const Account = () => {
                                     md={6}
                                     lg={4}
                                 >
-                                    <AccountProfile />
+                                    <AccountProfile user={user} />
                                 </Grid>
                                 <Grid
                                     xs={12}
@@ -112,14 +139,10 @@ const Account = () => {
                                     <form
                                         autoComplete="off"
                                         noValidate
-                                    // onSubmit={handleSubmit}
+                                        onSubmit={handleSubmit}
                                     >
                                         <Card>
-                                            <CardHeader
-                                                subheader="The information can be edited"
-                                                title="Profile"
-                                            />
-                                            <CardContent sx={{ pt: 0 }}>
+                                            <CardContent sx={{ pt: 1 }}>
                                                 <Box sx={{ m: -1.5 }}>
                                                     <Grid
                                                         container
@@ -129,66 +152,77 @@ const Account = () => {
                                                             xs={12}
                                                             md={6}
                                                         >
+                                                            <InputLabel id="label">Nom</InputLabel>
                                                             <TextField
                                                                 fullWidth
-                                                                helperText="Please specify the first name"
-                                                                label="First name"
-                                                                name="firstName"
-                                                                // onChange={handleChange}
+                                                                name="nom"
+                                                                onChange={handleChange}
                                                                 required
-                                                                value={values?.firstName}
+                                                                value={user?.nom}
                                                             />
                                                         </Grid>
                                                         <Grid
                                                             xs={12}
                                                             md={6}
                                                         >
+                                                            <InputLabel id="label">Prénom</InputLabel>
                                                             <TextField
                                                                 fullWidth
-                                                                label="Last name"
-                                                                name="lastName"
-                                                                // onChange={handleChange}
+                                                                name="prenom"
+                                                                onChange={handleChange}
                                                                 required
-                                                                value={values?.lastName}
+                                                                value={user?.prenom}
                                                             />
                                                         </Grid>
                                                         <Grid
                                                             xs={12}
                                                             md={6}
                                                         >
+                                                            <InputLabel id="label">Email</InputLabel>
                                                             <TextField
                                                                 fullWidth
-                                                                label="Email Address"
                                                                 name="email"
-                                                                // onChange={handleChange}
+                                                                onChange={handleChange}
                                                                 required
-                                                                value={values?.email}
+                                                                value={user?.email}
                                                             />
                                                         </Grid>
                                                         <Grid
                                                             xs={12}
                                                             md={6}
                                                         >
+                                                            <InputLabel id="label">Téléphone</InputLabel>
                                                             <TextField
                                                                 fullWidth
-                                                                label="Phone Number"
-                                                                name="phone"
-                                                                // onChange={handleChange}
+                                                                name="tel"
+                                                                onChange={handleChange}
                                                                 type="number"
-                                                                value={values?.phone}
+                                                                value={user?.tel}
                                                             />
                                                         </Grid>
                                                         <Grid
                                                             xs={12}
                                                             md={6}
                                                         >
+                                                            <InputLabel id="label">Numéro CIN</InputLabel>
                                                             <TextField
                                                                 fullWidth
-                                                                label="Country"
-                                                                name="country"
-                                                                // onChange={handleChange}
-                                                                required
-                                                                value={values?.country}
+                                                                name="CIN"
+                                                                onChange={handleChange}
+                                                                type="number"
+                                                                value={user?.CIN}
+                                                            />
+                                                        </Grid>
+                                                        <Grid
+                                                            xs={12}
+                                                            md={6}
+                                                        >
+                                                            <InputLabel id="label">Mot de passe</InputLabel>
+                                                            <TextField
+                                                                fullWidth
+                                                                name="password"
+                                                                onChange={handleChange}
+                                                                value={user?.password}
                                                             />
                                                         </Grid>
                                                     </Grid>
@@ -196,7 +230,7 @@ const Account = () => {
                                             </CardContent>
                                             <Divider />
                                             <CardActions sx={{ justifyContent: 'flex-end' }}>
-                                                <Button variant="contained">
+                                                <Button variant="contained" onClick={handleSubmit}>
                                                     Save details
                                                 </Button>
                                             </CardActions>

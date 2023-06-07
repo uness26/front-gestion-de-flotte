@@ -11,16 +11,21 @@ import Reclamations from './pages/reclamations';
 import AddUser from './pages/users/add';
 import EditUser from './pages/users/edit';
 import AddVehicule from './pages/vehicules/add';
+import EditVehicule from './pages/vehicules/edit';
 import AddMission from './pages/missions/add';
 import {
   BrowserRouter as Router,
   Routes,
-  Route
+  Route,
+  Navigate
 } from "react-router-dom";
-import { Sidebar } from './layout/sideBar';
-import { Navbar } from './layout/navBar';
+import { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 import Account from './pages/account';
 import EditMission from './pages/missions/edit';
+import { AuthProvider, useAuth } from './contexts/auth';
+import { ProtectedRoute } from "./pages/protected";
+
 
 const SIDE_NAV_WIDTH = 280;
 
@@ -41,39 +46,49 @@ const LayoutContainer = styled('div')({
 });
 
 function App() {
+  const { isAuthenticated } = useAuth();
+
+
 
   return (
     <LayoutRoot>
       <ThemeProvider theme={theme}>
         <Router>
-          <Navbar />
-          <Sidebar />
-          <Box
-            component="main"
-            sx={{
-              flexGrow: 1,
-              py: 8,
-            }}>
+          <AuthProvider>
+            <Box
+              component="main"
+              sx={{
+                flexGrow: 1,
+                py: 8,
+              }}>
 
-            <LayoutContainer>
-              <Routes>
-                <Route path='/account' element={<Account />} />
-                <Route path="/" element={<Login />} />
-                <Route path="/users" element={<Users />} />
-                <Route path="/users/add" element={<AddUser />} />
-                <Route path='/users/edit/:id' element={<EditUser />} />
-                <Route path="/vehicules" element={<Vehicules />} />
-                <Route path="/vehicules/add" element={<AddVehicule />} />
-                <Route path="/missions" element={<Missions />} />
-                <Route path="/missions/edit/:id" element={<EditMission />} />
-                <Route path="/missions/add" element={<AddMission />} />
-                <Route path="/reclamations" element={<Reclamations />} />
-              </Routes>
-            </LayoutContainer>
-          </Box>
+              <LayoutContainer>
+                <Routes>
+
+                  <Route path="/" element={<Login />} />,
+                  <Route path='/account' element={<Account />} />
+                
+                  <Route path="/users" element={<Users />} />
+
+                  <Route path="/users/add" element={<AddUser />} />
+                  <Route path='/users/edit/:id' element={<EditUser />} />
+                  <Route path="/vehicules" element={<Vehicules />} />
+                  <Route path="/vehicules/add" element={<AddVehicule />} />
+                  <Route path="/vehicules/edit/:id" element={<EditVehicule />} />
+                  <Route path="/missions" element={<Missions />} />
+                  <Route path="/missions/edit/:id" element={<EditMission />} />
+                  <Route path="/missions/add" element={<AddMission />} />
+                  <Route path="/reclamations" element={<Reclamations />} />
+                  <Route path="*" Component={()=>"404 NOT FOUND"}/>
+
+                </Routes>
+
+              </LayoutContainer>
+            </Box>
+          </AuthProvider>
         </Router>
       </ThemeProvider>
-    </LayoutRoot>
+    </LayoutRoot >
   );
 
 }

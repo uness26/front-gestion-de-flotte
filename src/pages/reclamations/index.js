@@ -14,6 +14,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import { Sidebar } from '../../layout/sideBar';
+import { Navbar } from '../../layout/navBar';
 
 export default function Reclamations() {
   const [listReclamations, setListReclamations] = useState([]);
@@ -41,6 +43,8 @@ export default function Reclamations() {
 
   return (
     <>
+      <Navbar />
+      <Sidebar />
       <Box
         sx={{
           alignItems: "center",
@@ -58,10 +62,6 @@ export default function Reclamations() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox />
-              </TableCell>
-              <TableCell> ID</TableCell>
               <TableCell align="right">Type</TableCell>
               <TableCell align="right">Date</TableCell>
               <TableCell align="right">Description</TableCell>
@@ -74,20 +74,21 @@ export default function Reclamations() {
               <TableRow
                 key={reclamation._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    value="true"
-                  />
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {reclamation._id}
-                </TableCell>
+
                 <TableCell align="right">{reclamation.type}</TableCell>
                 <TableCell align="right">{reclamation.date}</TableCell>
                 <TableCell align="right">{reclamation.description}</TableCell>
                 <TableCell align="right">{reclamation.etat}</TableCell>
-                <TableCell align="right">{reclamation.chauffeur}</TableCell>
-                <TableCell align="right">
+                <TableCell align="left">{reclamation.chauffeur?.nom} {reclamation.chauffeur?.prenom}</TableCell>
+                <TableCell align="left">
+                  <IconButton
+                    aria-label="edit"
+                    size="medium"
+                    onClick={() => {
+                      navigate(`/reclamations/edit/${reclamation._id}`)
+                    }}>
+                    <Edit />
+                  </IconButton>
                   <IconButton
                     aria-label="delete"
                     size="medium"

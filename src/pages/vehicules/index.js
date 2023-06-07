@@ -14,6 +14,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import { Sidebar } from '../../layout/sideBar';
+import { Navbar } from '../../layout/navBar';
 
 export default function Vehicules() {
   const [listVehicules, setListVehicules] = useState([]);
@@ -33,7 +35,7 @@ export default function Vehicules() {
   const handleDelete = async (id) => {
     try {
       await deleteVehicule(id);
-      setListVehicules(listVehicules.filter((vehicule) => vehicule.id !== id));
+      setListVehicules(listVehicules.filter((vehicule) => vehicule._id !== id));
     } catch (err) {
       console.log(err);
     }
@@ -41,6 +43,8 @@ export default function Vehicules() {
 
   return (
     <>
+      <Navbar />
+      <Sidebar />
       <Box
         sx={{
           alignItems: "center",
@@ -68,14 +72,11 @@ export default function Vehicules() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox />
-              </TableCell>
-              <TableCell> ID</TableCell>
-              <TableCell align="right">Type</TableCell>
-              <TableCell align="right">Marque</TableCell>
-              <TableCell align="right">Immatricule</TableCell>
-              <TableCell align="right">Volume</TableCell>
+              <TableCell align="center">Type</TableCell>
+              <TableCell align="center">Marque</TableCell>
+              <TableCell align="center">Immatricule</TableCell>
+              <TableCell align="center">Volume</TableCell>
+              <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -83,18 +84,10 @@ export default function Vehicules() {
               <TableRow
                 key={vehicule._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    value="true"
-                  />
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {vehicule._id}
-                </TableCell>
-                <TableCell align="right">{vehicule.type}</TableCell>
-                <TableCell align="right">{vehicule.marque}</TableCell>
-                <TableCell align="right">{vehicule.immatricule}</TableCell>
-                <TableCell align="right">{vehicule.volume}</TableCell>
+                <TableCell align="left">{vehicule.type}</TableCell>
+                <TableCell align="left">{vehicule.marque}</TableCell>
+                <TableCell align="left">{vehicule.immatricule}</TableCell>
+                <TableCell align="left">{vehicule.volume}</TableCell>
                 <TableCell align="right">
                   <IconButton
                     aria-label="edit"
@@ -108,7 +101,7 @@ export default function Vehicules() {
                     aria-label="delete"
                     size="medium"
                     onClick={async () => {
-                      await handleDelete(vehicule.id)
+                      await handleDelete(vehicule._id)
                     }}>
                     <Delete />
                   </IconButton>

@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import * as PropTypes from 'prop-types'
 import styled from "@emotion/styled";
 import { AppBar, Avatar, Badge, Box, Button, IconButton, Toolbar, Tooltip } from "@mui/material";
@@ -5,6 +6,12 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { Bell as BellIcon } from "../icons/bell";
 import { UserCircle as UserCircleIcon } from "../icons/user-circle";
+import { getUserProfile } from '../api/users';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../contexts/auth";
+import Cookies from "js-cookie";
+import api from "../api/api";
+
 
 const NavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -13,11 +20,27 @@ const NavbarRoot = styled(AppBar)(({ theme }) => ({
 
 export const Navbar = (props) => {
   const { onSidebarOpen, ...other } = props;
+  const [user, setUser] = useState();
+  const {Logout}=useAuth();
+  
 
-  //   const { user, isAuthenticated, loading, logout } = useAuth();
+
+  useEffect(() => {
+    getUserProfile()
+      .then((response) => {
+        setUser(response.data)
+        console.log(response.data)
+      })
+      .catch((error) => (
+        console.error(error)
+      ))
+  }, [])
+
+  
 
   return (
     <>
+
       <NavbarRoot
         sx={{
           left: {
@@ -62,7 +85,7 @@ export const Navbar = (props) => {
             </IconButton>
           </Tooltip>
           <Button sx={{ ml: 1 }} >
-            Uness BEN AMMAR
+            {user?.nom} {user?.prenom}
           </Button>
           <Avatar
             sx={{
@@ -72,23 +95,17 @@ export const Navbar = (props) => {
             }}
             src=""
           >
-            {/* {!loading && isAuthenticated ? (
-              user?.nom[0] + user?.prenom[0]
-            ) : ( */}
             <UserCircleIcon fontSize="small" />
-            {/* )} */}
           </Avatar>
-          {/* {!loading && isAuthenticated && ( */}
-          <Button sx={{ ml: 1 }} >
+          <Button sx={{ ml: 1 }} onClick={Logout} >
             Logout
           </Button>
-          {/* )} */}
         </Toolbar>
       </NavbarRoot>
     </>
   );
 };
 
-Navbar.propTypes = {
-  onSidebarOpen: PropTypes.func,
-};
+ Navbar.propTypes = {
+   onSidebarOpen: PropTypes.func,
+ };

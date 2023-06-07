@@ -15,6 +15,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from "../../layout/layout";
+import { Sidebar } from '../../layout/sideBar';
+import { Navbar } from '../../layout/navBar';
 
 function Users() {
   const [listUsers, setListUsers] = useState([]);
@@ -40,8 +42,11 @@ function Users() {
     }
   };
 
+
   return (
     <>
+      <Navbar />
+      <Sidebar />
       <Box
         sx={{
           alignItems: "center",
@@ -51,7 +56,7 @@ function Users() {
           m: -1,
         }}
       >
-        <Typography sx={{ m: 1, margin:'1rem' }} variant="h4">
+        <Typography sx={{ m: 1, margin: '1rem' }} variant="h4">
           Users
         </Typography>
         <Box sx={{ m: 1 }}>
@@ -72,7 +77,6 @@ function Users() {
               <TableCell padding="checkbox">
                 <Checkbox />
               </TableCell>
-              <TableCell> ID</TableCell>
               <TableCell align="right">First Name</TableCell>
               <TableCell align="right">Last Name</TableCell>
               <TableCell align="right">Email</TableCell>
@@ -90,9 +94,7 @@ function Users() {
                     value="true"
                   />
                 </TableCell>
-                <TableCell component="th" scope="row">
-                  {user._id}
-                </TableCell>
+
                 <TableCell align="right">{user.nom}</TableCell>
                 <TableCell align="right">{user.prenom}</TableCell>
                 <TableCell align="right">{user.email}</TableCell>
@@ -124,6 +126,6 @@ function Users() {
     </>
   )
 }
-Users.getLayout = (page) => <Layout>{page}</Layout>;
+// Users.getLayout = (page) => <Layout>{page}</Layout>;
 
 export default Users;

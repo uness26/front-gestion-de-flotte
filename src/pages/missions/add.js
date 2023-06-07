@@ -9,24 +9,26 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { createMission } from "../../api/missions";
-import { DateField } from '@mui/x-date-pickers/DateField';
-import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { getVehicules } from '../../api/vehicules';
 import { getUsers } from '../../api/users';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import { Sidebar } from '../../layout/sideBar';
+import { Navbar } from '../../layout/navBar';
 
 export default function AddMission() {
     const navigate = useNavigate();
     const [vehicules, setVehicules] = useState([]);
     const [chauffeurs, setChaffeurs] = useState([]);
     const [mission, setMission] = useState({});
-    const [date, setDate] = useState(
-        dayjs('2014-08-18T21:11:54'),
-    );
+    const [date, setDate] = useState();
+    const [heureDep, setTime] = useState();
 
     useEffect(() => {
         getVehicules().then((response) => {
@@ -38,7 +40,6 @@ export default function AddMission() {
     useEffect(() => {
         getUsers().then((response) => {
             setChaffeurs(response.data.filter((user) => user.role !== 'ADMIN'))
-            console.log(chauffeurs)
         })
             .catch((error) => (console.error(error)))
     }, [])
@@ -46,13 +47,19 @@ export default function AddMission() {
     useEffect(() => {
         setMission({
             ...mission,
-            date: date,
+            date,
+            heureDep,
         });
-    }, [date])
 
-    const handleChangeDate = (newValue) => {
-        setDate(newValue)
-        console.log(mission)
+    }, [date, heureDep])
+
+    const handleChangeDate = (newDate) => {
+        const date = newDate.toISOString().slice(0, 10);
+        setDate(date)
+    };
+    const handleChangeTime = (newTime) => {
+        const time = newTime.toISOString().split("T")[1].slice(0, 5)
+        setTime(time)
     };
 
     const handleChange = (event) => {
@@ -76,6 +83,8 @@ export default function AddMission() {
 
     return (
         <>
+        <Navbar />
+        <Sidebar />
             <title> AddMission </title>
             <Box
                 component="main"
@@ -95,13 +104,24 @@ export default function AddMission() {
                                 <Grid container spacing={3}>
                                     <Grid item md={6} xs={12}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs} >
-                                            <DateField
+                                            <DatePicker
                                                 label="Date"
-                                                inputFormat="dd/MM/yyyy"
+                                                format="DD/MM/YYYY"
                                                 name="date"
-                                                value={mission.date}
                                                 required
                                                 onChange={handleChangeDate}
+                                                fullWidth
+                                            />
+                                        </LocalizationProvider>
+                                    </Grid>
+                                    <Grid item md={6} xs={12}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} >
+                                            <TimePicker
+                                                label="Heure de départ"
+                                                format="hh:mm"
+                                                name="heureDep"
+                                                required
+                                                onChange={handleChangeTime}
                                                 variant="outlined"
                                                 fullWidth
                                             />
@@ -114,7 +134,6 @@ export default function AddMission() {
                                             name="lieuDep"
                                             onChange={handleChange}
                                             required
-                                            value={mission.lieuDep}
                                             variant="outlined"
                                         />
                                     </Grid>
@@ -125,18 +144,6 @@ export default function AddMission() {
                                             name="lieuArr"
                                             onChange={handleChange}
                                             required
-                                            value={mission.lieuArr}
-                                            variant="outlined"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} xs={12}>
-                                        <TextField
-                                            fullWidth
-                                            label="Etat"
-                                            name="etat"
-                                            onChange={handleChange}
-                                            required
-                                            value={mission.etat}
                                             variant="outlined"
                                         />
                                     </Grid>
@@ -148,7 +155,6 @@ export default function AddMission() {
                                             name="chauffeur"
                                             fullWidth
                                             onChange={handleChange}
-                                            value={chauffeurs.find((chauffeur) => chauffeur?._id == mission?.chaffeur)?._id}
                                             label="Chauffeur"
                                         >
                                             {chauffeurs.map((chauffeur) => (
@@ -164,7 +170,6 @@ export default function AddMission() {
                                             name="vehicule"
                                             fullWidth
                                             onChange={handleChange}
-                                            value={vehicules?.find((vehicule) => vehicule?._id == mission?.vehicule)?._id}
                                             label="Vehicule"
                                         >
                                             {vehicules?.map((vehicule) => (

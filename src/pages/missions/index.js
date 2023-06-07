@@ -14,13 +14,15 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import { Sidebar } from '../../layout/sideBar';
+import { Navbar } from '../../layout/navBar';
 
 export default function Missions() {
   const [listMissions, setListMissions] = useState([]);
   const navigate = useNavigate()
 
   useEffect(() => {
-    getMissions()
+    getMissions()   
       .then((response) => {
         setListMissions(response.data)
         console.log(response.data)
@@ -41,6 +43,8 @@ export default function Missions() {
 
   return (
     <>
+    <Navbar />
+    <Sidebar />
       <Box
         sx={{
           alignItems: "center",
@@ -59,44 +63,40 @@ export default function Missions() {
             variant="contained"
             onClick={() => {
               navigate("/missions/add");
-            }}>
+            }}> 
             Add new mission
           </Button>
         </Box>
       </Box>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 700 }} aria-label="simple table" size="small">
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox />
-              </TableCell>
-              <TableCell align="right">Date</TableCell>
-              <TableCell align="right">Lieu de départ</TableCell>
-              <TableCell align="right">Lieu d'arrivée</TableCell>
-              <TableCell align="right">Etat</TableCell>
-              <TableCell align="right">Chauffeur</TableCell>
-              <TableCell align="right">Véhicule</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell align="left">Date</TableCell>
+              <TableCell align="left">Etat</TableCell>
+              <TableCell align="left">Lieu de départ</TableCell>
+              <TableCell align="left">Lieu d'arrivée</TableCell>
+              <TableCell align="left">Heure de départ</TableCell>
+              <TableCell align="left">Heure d'arrivée</TableCell>
+              <TableCell align="left">Chauffeur</TableCell>
+              <TableCell align="left">Véhicule</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {listMissions.map((mission) => (
               <TableRow
                 key={mission._id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    value="true"
-                  />
-                </TableCell>
-                <TableCell align="right">{mission.date}</TableCell>
-                <TableCell align="right">{mission.lieuDep}</TableCell>
-                <TableCell align="right">{mission.lieuArr}</TableCell>
-                <TableCell align="right">{mission.etat}</TableCell>
-                <TableCell align="right">{mission.chauffeur?.nom} {mission.chauffeur?.prenom}</TableCell>
-                <TableCell align="right">{mission?.vehicule?.type} {mission.vehicule?.marque}</TableCell>
-                <TableCell align="right">
+                sx={{ '&:last-child td, &:last-child th': { border: 0 }  }}>
+                
+                <TableCell align="left" width={100}>{mission.date}</TableCell>
+                <TableCell align="left">{mission.etat}</TableCell>
+                <TableCell align="left">{mission.lieuDep}</TableCell>
+                <TableCell align="left">{mission.lieuArr}</TableCell>
+                <TableCell align="left">{mission.heureDep}</TableCell>
+                <TableCell align="left">{mission.heureArr}</TableCell>
+                <TableCell align="left">{mission.chauffeur?.nom} {mission.chauffeur?.prenom}</TableCell>
+                <TableCell align="left">{mission?.vehicule?.type} {mission.vehicule?.marque}</TableCell>
+                <TableCell align="left">
                   <IconButton
                     aria-label="edit"
                     size="medium"

@@ -4,10 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import { useFormik } from "formik";
 import { Box, Button, Container, Grid, TextField, Typography } from "@mui/material";
 import toast, { Toaster } from "react-hot-toast";
+import { useAuth } from "../../contexts/auth";
+import { useEffect } from "react";
+
+
 
 export default function Login() {
   const navigate = useNavigate()
-  
+  const { login, loading, isAuthenticated } = useAuth();
+
   
   const formik = useFormik({
     initialValues: {
@@ -20,36 +25,44 @@ export default function Login() {
     }),
     onSubmit: async (value) => {
       try {
-        //await Login(value);
-        navigate("/missions");
+        await login(value);
+         navigate("/missions");
       } catch (err) {
+        console.log(err)
         toast.error("Invalid crediantials, please try again");
       }
     },
   });
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      console.log("logged In " + isAuthenticated)
+      navigate("/");
+    }
+  }, [])
+ 
 
   return (
     <>
+
+    <title>
+    Login
+    </title>
       <Box
         component="main"
         sx={{
+          height: 400,
+          width : 800,
           alignItems: "center",
           display: "flex",
-          flexGrow: 1,
-          minHeight: "100%",
         }}
       >
         <Container maxWidth="sm">
           <form onSubmit={formik.handleSubmit}>
-            <Box sx={{ my: 3 }}>
+            <Box sx={{ my:  4}}>
               <Typography color="textPrimary" variant="h4">
                 Sign in
               </Typography>
             </Box>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6}></Grid>
-              <Grid item xs={12} md={6}></Grid>
-            </Grid>
             <Box
               sx={{
                 pb: 1,
