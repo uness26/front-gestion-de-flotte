@@ -21,14 +21,7 @@ export default function AddUser() {
     const navigate = useNavigate();
     const [user, setUser] = useState({});
 
-    const validateCin = (cin) => {
-        for (var i = 0; i < cin.toString().length; ++i) {
-            if (isNaN(cin[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
+
 
     const handleChange = (event) => {
         setUser({
@@ -61,11 +54,10 @@ export default function AddUser() {
                 }}>
                 <Container maxWidth="lg">
                     <Typography sx={{ mb: 3 }} variant="h4">
-                        Add User
+                        Ajouter Chauffeur
                     </Typography>
                     <form autoComplete="off" onSubmit={handleSubmit}>
                         <Card>
-                            <CardHeader subheader="The information can be edited" title="User" />
                             <Divider />
                             <CardContent>
                                 <Grid container spacing={3}>

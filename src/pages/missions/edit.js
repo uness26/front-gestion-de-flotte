@@ -18,7 +18,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { getVehicules } from '../../api/vehicules';
-import { getUsers } from '../../api/users';
+import { getUsers, getUserById } from '../../api/users';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -29,10 +29,12 @@ export default function EditMission() {
     const { id } = useParams();
     const [mission, setMission] = useState({});
     const [vehicules, setVehicules] = useState([]);
-    const [chauffeurs, setChaffeurs] = useState([]);
+    const [chauffeurs, setChauffeurs] = useState([]);
     const navigate = useNavigate();
-    const [date, setDate] = useState();
-    const [heureDep, setTime] = useState();
+    const [selectedChauffeur, setSelectedChauffeur] = useState(null);
+
+
+
 
 
     useEffect(() => {
@@ -44,41 +46,42 @@ export default function EditMission() {
 
     useEffect(() => {
         getUsers().then((response) => {
-            setChaffeurs(response.data.filter((user) => user.role !== 'ADMIN'))
-            console.log(chauffeurs)
+            setChauffeurs(response.data.filter((user) => user.role !== 'ADMIN'))
         })
             .catch((error) => (console.error(error)))
     }, [])
 
-    useEffect(() => {
-        setMission({
-            ...mission,
-            date,
-            heureDep,
-        });
-    }, [date, heureDep])
 
     useEffect(() => {
         getMissionById(id)
             .then((response) => {
-                setMission(response.data)
-                console.log(response.data)
+                setMission({
+                    ...response.data,
+                    date: dayjs(response.data.date, 'DD/MM/YYYY'),
+                    heureDep: dayjs(response.data.heureDep, 'HH:mm')
+                })
+
+
             })
             .catch((error) => {
                 console.error(error)
             })
-        console.log(mission)
     }, [id]);
 
+
     const handleChangeDate = (newDate) => {
-        const date = newDate.toISOString().slice(0, 10);
-        setDate(date)
+
+        setMission({
+            ...mission,
+            date: newDate
+        })
     };
 
     const handleChangeTime = (newTime) => {
-        const time = newTime.toISOString().split("T")[1].slice(0, 5)
-        setTime(time)
-        console.log(time)
+        setMission({
+            ...mission,
+            heureDep: newTime
+        })
     };
 
     const handleChange = (event) => {
@@ -110,8 +113,8 @@ export default function EditMission() {
 
     return (
         <>
-        <Navbar />
-        <Sidebar />
+            <Navbar />
+            <Sidebar />
             <Box
                 component="main"
                 sx={{
@@ -133,7 +136,7 @@ export default function EditMission() {
                                                 label="Date"
                                                 format="DD/MM/YYYY"
                                                 name="date"
-                                                value={dayjs(mission?.date ? mission?.date : "")}
+                                                value={mission?.date}
                                                 required
                                                 onChange={handleChangeDate}
                                                 fullWidth
@@ -144,8 +147,9 @@ export default function EditMission() {
                                         <LocalizationProvider dateAdapter={AdapterDayjs} >
                                             <TimePicker
                                                 label="Heure de départ"
-                                                format="hh:mm"
+                                                format="HH:mm"
                                                 name="heureDep"
+                                                value={mission?.heureDep}
                                                 required
                                                 onChange={handleChangeTime}
                                                 variant="outlined"
@@ -183,7 +187,7 @@ export default function EditMission() {
                                             name="chauffeur"
                                             fullWidth
                                             onChange={handleChange}
-                                            defaultValue={mission.chaufeur ? mission.chaufeur : " "}                                        >
+                                            defaultValue={mission?.chauffeur?._id || ""}                                        >
                                             {chauffeurs.map((chauffeur) => (
                                                 <MenuItem value={chauffeur?._id}>{chauffeur?.nom} {chauffeur?.prenom}</MenuItem>
                                             ))}
@@ -197,7 +201,7 @@ export default function EditMission() {
                                             name="vehicule"
                                             fullWidth
                                             onChange={handleChange}
-                                            value={mission?.vehicule ? mission?.vehicule : ""}
+                                            defaultValue={mission?.vehicule?._id || ""}
                                         >
                                             {vehicules?.map((vehicule) => (
                                                 <MenuItem value={vehicule?._id}>{vehicule?.type} {vehicule?.marque} </MenuItem>

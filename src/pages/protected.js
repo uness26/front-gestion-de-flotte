@@ -1,26 +1,35 @@
-import React from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
-import { useAuth } from "../contexts/auth";
+import { Navigate, Outlet, useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/auth'
+import { useEffect } from 'react';
 
+// export const Protected = ({ children }) => {
+//   const { isAuthenticated , loading} = useAuth();
+//   const navigate = useNavigate();
+//   console.log('Protected - isAuthenticated:', isAuthenticated);
+  
+//   useEffect(() => {
+//     if (!isAuthenticated) {
+//       navigate('/');
+//     }
+//   }, [isAuthenticated]);
 
-export const ProtectedRoute = ({
-  component: Component,
-  ...rest
-}) => {
-  const { isAuthenticated } = useAuth();
-  return (
-    
-    <Route
-      {...rest}
-      render={props => {
-        if (isAuthenticated) {
-          return <Component {...props} />;
-        } else {
-          return (
-            <Navigate to="/" replace />
-          );
-        }
-      }}
-    />
-  );
+//   if (!isAuthenticated) {
+
+//     // alert("Il Faut S'authentifier")
+//     return <Navigate to="/" replace />
+//   }
+//   return children;
+// }
+export const Protected = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return null;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
 };

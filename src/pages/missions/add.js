@@ -44,35 +44,32 @@ export default function AddMission() {
             .catch((error) => (console.error(error)))
     }, [])
 
-    useEffect(() => {
-        setMission({
-            ...mission,
-            date,
-            heureDep,
-        });
-
-    }, [date, heureDep])
+   
 
     const handleChangeDate = (newDate) => {
-        const date = newDate.toISOString().slice(0, 10);
-        setDate(date)
+      
+        setMission({
+            ...mission,
+            date: newDate
+        })
     };
+
     const handleChangeTime = (newTime) => {
-        const time = newTime.toISOString().split("T")[1].slice(0, 5)
-        setTime(time)
+        setMission({
+            ...mission,
+            heureDep: newTime
+        })
     };
 
     const handleChange = (event) => {
         setMission({
             ...mission,
             [event.target.name]: event.target.value
-        });
-        console.log(mission)
+        })
     }
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(mission)
         createMission(mission)
             .then((res) => {
                 console.log(res);

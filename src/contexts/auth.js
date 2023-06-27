@@ -48,6 +48,8 @@ export const AuthProvider = ({ children }) => {
     navigate('/')
   };
 
+  
+
 
   return (
     <AuthContext.Provider value={{ isAuthenticated: !!user, user, login, loading, Logout }}>

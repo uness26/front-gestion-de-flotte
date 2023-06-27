@@ -13,19 +13,16 @@ import EditUser from './pages/users/edit';
 import AddVehicule from './pages/vehicules/add';
 import EditVehicule from './pages/vehicules/edit';
 import AddMission from './pages/missions/add';
+import NotFound from './pages/404';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate
 } from "react-router-dom";
-import { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
 import Account from './pages/account';
 import EditMission from './pages/missions/edit';
-import { AuthProvider, useAuth } from './contexts/auth';
-import { ProtectedRoute } from "./pages/protected";
-
+import { AuthProvider } from './contexts/auth';
+import { Protected } from "./pages/protected";
 
 const SIDE_NAV_WIDTH = 280;
 
@@ -46,8 +43,6 @@ const LayoutContainer = styled('div')({
 });
 
 function App() {
-  const { isAuthenticated } = useAuth();
-
 
 
   return (
@@ -64,23 +59,69 @@ function App() {
 
               <LayoutContainer>
                 <Routes>
+                  <Route path="/" element={<Login />} />
 
-                  <Route path="/" element={<Login />} />,
-                  <Route path='/account' element={<Account />} />
-                
-                  <Route path="/users" element={<Users />} />
+                  <Route path='/account' element={
+                    <Protected>
+                      <Account />
+                    </Protected>
+                  } />
 
-                  <Route path="/users/add" element={<AddUser />} />
-                  <Route path='/users/edit/:id' element={<EditUser />} />
-                  <Route path="/vehicules" element={<Vehicules />} />
-                  <Route path="/vehicules/add" element={<AddVehicule />} />
-                  <Route path="/vehicules/edit/:id" element={<EditVehicule />} />
-                  <Route path="/missions" element={<Missions />} />
-                  <Route path="/missions/edit/:id" element={<EditMission />} />
-                  <Route path="/missions/add" element={<AddMission />} />
-                  <Route path="/reclamations" element={<Reclamations />} />
-                  <Route path="*" Component={()=>"404 NOT FOUND"}/>
-
+                  <Route path="/users" element={
+                    <Protected>
+                      <Users />
+                    </Protected>
+                  } />
+                  <Route path="/users/add" element={
+                    <Protected>
+                      <AddUser />
+                    </Protected>
+                  } />
+                  <Route path='/users/edit/:id' element={
+                    <Protected>
+                      <EditUser />
+                    </Protected>
+                  } />
+                  <Route path="/vehicules" element={
+                    <Protected>
+                      <Vehicules />
+                    </Protected>
+                  } />
+                  <Route path="/vehicules/add" element={
+                    <Protected>
+                      <AddVehicule />
+                    </Protected>
+                  } />
+                  <Route path="/vehicules/edit/:id" element={
+                    <Protected>
+                      <EditVehicule />
+                    </Protected>
+                  } />
+                  <Route path="/missions" element={
+                    <Protected>
+                      <Missions />
+                    </Protected>
+                  } />
+                  <Route path="/missions/edit/:id" element={
+                    <Protected>
+                      <EditMission />
+                    </Protected>
+                  } />
+                  <Route path="/missions/add" element={
+                    <Protected>
+                      <AddMission />
+                    </Protected>
+                  } />
+                  <Route path="/reclamations" element={
+                    <Protected>
+                      <Reclamations />
+                    </Protected>
+                  } />
+                  <Route path="*" element={
+                    <Protected>
+                      <NotFound />
+                    </Protected>
+                  } />
                 </Routes>
 
               </LayoutContainer>
@@ -88,7 +129,7 @@ function App() {
           </AuthProvider>
         </Router>
       </ThemeProvider>
-    </LayoutRoot >
+    </LayoutRoot>
   );
 
 }

@@ -16,6 +16,7 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../../layout/sideBar';
 import { Navbar } from '../../layout/navBar';
+import SearchBar from '../../layout/searchBar'
 
 export default function Missions() {
   const [listMissions, setListMissions] = useState([]);
@@ -54,6 +55,7 @@ export default function Missions() {
           m: -1,
         }}
       >
+      <SearchBar/>
         <Typography sx={{ m: 1 }} variant="h4">
           Missions
         </Typography>

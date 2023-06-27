@@ -19,6 +19,7 @@ import { Navbar } from '../../layout/navBar';
 
 export default function Reclamations() {
   const [listReclamations, setListReclamations] = useState([]);
+  
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -31,6 +32,8 @@ export default function Reclamations() {
         console.error(error)
       ))
   }, [])
+
+
 
   const handleDelete = async (id) => {
     try {
@@ -62,11 +65,11 @@ export default function Reclamations() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="right">Type</TableCell>
-              <TableCell align="right">Date</TableCell>
-              <TableCell align="right">Description</TableCell>
-              <TableCell align="right">Etat</TableCell>
-              <TableCell align="right">Chauffeur</TableCell>
+              <TableCell align="center">Type</TableCell>
+              <TableCell align="center">Date</TableCell>
+              <TableCell align="center">Description</TableCell>
+              <TableCell align="center">Etat</TableCell>
+              <TableCell align="center">Chauffeur</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -75,10 +78,10 @@ export default function Reclamations() {
                 key={reclamation._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 
-                <TableCell align="right">{reclamation.type}</TableCell>
-                <TableCell align="right">{reclamation.date}</TableCell>
-                <TableCell align="right">{reclamation.description}</TableCell>
-                <TableCell align="right">{reclamation.etat}</TableCell>
+                <TableCell align="left">{reclamation.type}</TableCell>
+                <TableCell align="left">{reclamation.date}</TableCell>
+                <TableCell align="left">{reclamation.description}</TableCell>
+                <TableCell align="left">{reclamation.etat}</TableCell>
                 <TableCell align="left">{reclamation.chauffeur?.nom} {reclamation.chauffeur?.prenom}</TableCell>
                 <TableCell align="left">
                   <IconButton

@@ -33,13 +33,9 @@ export default function Login() {
       }
     },
   });
-  useEffect(() => {
-    if (!loading && isAuthenticated) {
-      console.log("logged In " + isAuthenticated)
-      navigate("/");
-    }
-  }, [])
+
  
+
 
   return (
     <>
