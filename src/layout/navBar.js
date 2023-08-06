@@ -3,14 +3,12 @@ import * as PropTypes from 'prop-types'
 import styled from "@emotion/styled";
 import { AppBar, Avatar, Badge, Box, Button, IconButton, Toolbar, Tooltip } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
 import { Bell as BellIcon } from "../icons/bell";
 import { UserCircle as UserCircleIcon } from "../icons/user-circle";
 import { getUserProfile } from '../api/users';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../contexts/auth";
-import Cookies from "js-cookie";
-import api from "../api/api";
+import socket from "../contexts/socket_manager"
+import Notification from "./notificationsCard"
 
 
 const NavbarRoot = styled(AppBar)(({ theme }) => ({
@@ -22,8 +20,22 @@ export const Navbar = (props) => {
   const { onSidebarOpen, ...other } = props;
   const [user, setUser] = useState();
   const {Logout}=useAuth();
-  
+  const [notification, setNotification] = useState(null); // Store the notification message here
 
+  
+  useEffect(() => {
+    // Listen to the 'addReclamation' event and show the notification
+    socket.on('addReclamation', (matricule) => {
+      const message = `New reclamation added for driver ${JSON.parse(matricule)}`;
+      setNotification(message);
+    });
+    
+    socket.on('addReclamation', (matricule) => {
+      const message = `New reclamation added for driver ${JSON.parse(matricule)}`;
+      setNotification(message);
+    });
+
+  }, []);
 
   useEffect(() => {
     getUserProfile()
@@ -35,8 +47,10 @@ export const Navbar = (props) => {
       ))
   }, [])
 
+  const closeNotification = () => {
+    setNotification(null);
+  };
   
-
   return (
     <>
 
@@ -71,9 +85,12 @@ export const Navbar = (props) => {
             <MenuIcon fontSize="small" />
           </IconButton>
           <Box sx={{ flexGrow: 1 }} />
+          {notification && <Notification message={notification} onClose={()=>{}} />}
           <Tooltip title="Notifications">
-            <IconButton sx={{ ml: 1 }}>
-              <Badge badgeContent={4} color="primary" variant="dot">
+            <IconButton sx={{ ml: 1 }}
+            onClick={closeNotification}
+            >
+              <Badge badgeContent={notification ? 1 : 0} color="primary" variant="dot">
                 <BellIcon fontSize="small" />
               </Badge>
             </IconButton>
@@ -96,6 +113,7 @@ export const Navbar = (props) => {
           </Button>
         </Toolbar>
       </NavbarRoot>
+
     </>
   );
 };

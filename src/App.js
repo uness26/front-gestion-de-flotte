@@ -23,6 +23,9 @@ import Account from './pages/account';
 import EditMission from './pages/missions/edit';
 import { AuthProvider } from './contexts/auth';
 import { Protected } from "./pages/protected";
+import { useEffect, useState } from 'react';
+import socket from "./contexts/socket_manager"
+
 
 const SIDE_NAV_WIDTH = 280;
 
@@ -44,7 +47,14 @@ const LayoutContainer = styled('div')({
 
 function App() {
 
-
+  useEffect(() => {
+    socket.connect()
+    return () => {
+      socket.disconnect()
+    }
+  }, [])
+  console.log(socket)
+ 
   return (
     <LayoutRoot>
       <ThemeProvider theme={theme}>
@@ -135,3 +145,4 @@ function App() {
 }
 
 export default App;
+  

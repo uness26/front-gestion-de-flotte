@@ -86,6 +86,7 @@ const Account = () => {
         event.preventDefault();
         const id = user._id
         const body = {
+            matricule: user.matricule,
             nom: user.nom,
             prenom: user.prenom,
             CIN: user.CIN,
@@ -148,6 +149,19 @@ const Account = () => {
                                                         container
                                                         spacing={3}
                                                     >
+                                                    <Grid
+                                                            xs={12}
+                                                            md={6}
+                                                        >
+                                                            <InputLabel id="label">Matricule</InputLabel>
+                                                            <TextField
+                                                                fullWidth
+                                                                name="matricule"
+                                                                onChange={handleChange}
+                                                                required
+                                                                value={user?.matricule}
+                                                            />
+                                                        </Grid>
                                                         <Grid
                                                             xs={12}
                                                             md={6}

@@ -13,12 +13,12 @@ const items = [
   {
     href: '/users',
     icon: (<UsersIcon fontSize="small" />),
-    title: 'Users'
+    title: 'Chauffeurs',
   },
   {
     href: '/reclamations',
     icon: (<MenuIcon fontSize="small" />),
-    title: 'Reclamations'
+    title: 'Réclamations'
   },
   {
     href: '/missions',
@@ -28,12 +28,12 @@ const items = [
   {
     href: '/vehicules',
     icon: (<MenuIcon fontSize="small" />),
-    title: 'Vehicules'
+    title: 'Véhicules'
   },
   {
     href: '/account',
     icon: (<UserIcon fontSize="small" />),
-    title: 'Profil'
+    title: 'Profile'
   },
 ];
 
@@ -90,13 +90,7 @@ export const Sidebar = (props) => {
                   GESTION DE FLOTTE
                 </Typography>
               </div>
-              <SelectorIcon
-                sx={{
-                  color: 'neutral.500',
-                  width: 14,
-                  height: 14
-                }}
-              />
+            
             </Box>
           </Box>
         </div>

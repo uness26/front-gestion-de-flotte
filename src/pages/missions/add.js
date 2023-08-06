@@ -21,14 +21,15 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { Sidebar } from '../../layout/sideBar';
 import { Navbar } from '../../layout/navBar';
+import socket from "../../contexts/socket_manager"
+
 
 export default function AddMission() {
     const navigate = useNavigate();
     const [vehicules, setVehicules] = useState([]);
     const [chauffeurs, setChaffeurs] = useState([]);
     const [mission, setMission] = useState({});
-    const [date, setDate] = useState();
-    const [heureDep, setTime] = useState();
+   
 
     useEffect(() => {
         getVehicules().then((response) => {
@@ -74,6 +75,7 @@ export default function AddMission() {
             .then((res) => {
                 console.log(res);
                 navigate("/missions");
+                socket.emit("addMission", mission)
             })
             .catch((err) => console.log(err));
     };
@@ -154,7 +156,7 @@ export default function AddMission() {
                                             onChange={handleChange}
                                             label="Chauffeur"
                                         >
-                                            {chauffeurs.map((chauffeur) => (
+                                            {chauffeurs?.map((chauffeur) => (
                                                 <MenuItem value={chauffeur?._id}>{chauffeur?.nom} {chauffeur?.prenom}</MenuItem>
                                             ))}
                                         </Select>

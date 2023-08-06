@@ -60,8 +60,6 @@ export default function EditMission() {
                     date: dayjs(response.data.date, 'DD/MM/YYYY'),
                     heureDep: dayjs(response.data.heureDep, 'HH:mm')
                 })
-
-
             })
             .catch((error) => {
                 console.error(error)

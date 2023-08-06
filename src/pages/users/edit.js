@@ -54,6 +54,7 @@ export default function EditUser() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const body = {
+            matricule: user.matricule,
             nom: user.nom,
             prenom: user.prenom,
             CIN: user.CIN,
@@ -82,16 +83,26 @@ export default function EditUser() {
                 }}>
                 <Container maxWidth="lg">
                     <Typography sx={{ mb: 3 }} variant="h4">
-                        Edit User
+                        Modifier 
                     </Typography>
                     <form autoComplete="off" onSubmit={handleSubmit}>
                         <Card>
-                            <CardHeader subheader="The informations can be edited" title="User" />
                             <Divider />
                             <CardContent>
                                 <Grid container spacing={3}>
+                                <Grid item md={6} xs={12}>
+                                        <InputLabel id="label">Matricule</InputLabel>
+                                        <TextField
+                                            fullWidth
+                                            name="matricule"
+                                            onChange={handleChange}
+                                            required
+                                            value={user?.matricule}
+                                            variant="outlined"
+                                        />
+                                    </Grid>
                                     <Grid item md={6} xs={12}>
-                                        <InputLabel id="label">§Nom</InputLabel>
+                                        <InputLabel id="label">Nom</InputLabel>
                                         <TextField
                                             fullWidth
                                             name="nom"
@@ -135,7 +146,7 @@ export default function EditUser() {
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
-                                        <InputLabel id="label">Téléphone</InputLabel>
+                                        <InputLabel id="label">Télephone</InputLabel>
                                         <TextField
                                             fullWidth
                                             name="tel"

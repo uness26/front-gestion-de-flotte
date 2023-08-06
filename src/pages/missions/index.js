@@ -90,7 +90,7 @@ export default function Missions() {
                 key={mission._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 }  }}>
                 
-                <TableCell align="left" width={100}>{mission.date}</TableCell>
+                <TableCell align="left" >{mission.date}</TableCell>
                 <TableCell align="left">{mission.etat}</TableCell>
                 <TableCell align="left">{mission.lieuDep}</TableCell>
                 <TableCell align="left">{mission.lieuArr}</TableCell>

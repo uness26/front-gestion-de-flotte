@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getReclamations, deleteReclamation } from '../../api/reclamations';
+import { getReclamations, getReclamationById, deleteReclamation, updateReclamation } from '../../api/reclamations';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -13,14 +13,18 @@ import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../../layout/sideBar';
 import { Navbar } from '../../layout/navBar';
+import MenuItem from '@mui/material/MenuItem';
+import socket from "../../contexts/socket_manager"
+import Menu from '@mui/material/Menu';
+
 
 export default function Reclamations() {
   const [listReclamations, setListReclamations] = useState([]);
-  
-  const navigate = useNavigate()
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const [selectedReclamation, setReclamation] = useState();
 
   useEffect(() => {
     getReclamations()
@@ -33,7 +37,32 @@ export default function Reclamations() {
       ))
   }, [])
 
+  const handleClick = (event, id) => {
+    setReclamation(listReclamations.find(reclamation => reclamation._id === id));
+    console.log(selectedReclamation)
+    setAnchorEl(event.currentTarget);
+  };
 
+  const handleEtatUpdate = (id, newEtat) => {
+    const body = {
+      etat: newEtat,
+    }
+    updateReclamation(id, body)
+      .then((res) => {
+        console.log(res)
+        setListReclamations((prevReclamations) =>
+          prevReclamations.map((reclamation) => {
+            if (reclamation._id === id) {
+              return { ...reclamation, etat: newEtat };
+            }
+            return reclamation;
+          })
+        );
+        setAnchorEl(null);
+        socket.emit("editEtat", {selectedReclamation, newEtat})
+      })
+      .catch((err) => console.log(err));
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -70,6 +99,7 @@ export default function Reclamations() {
               <TableCell align="center">Description</TableCell>
               <TableCell align="center">Etat</TableCell>
               <TableCell align="center">Chauffeur</TableCell>
+              <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -80,18 +110,38 @@ export default function Reclamations() {
 
                 <TableCell align="left">{reclamation.type}</TableCell>
                 <TableCell align="left">{reclamation.date}</TableCell>
-                <TableCell align="left">{reclamation.description}</TableCell>
-                <TableCell align="left">{reclamation.etat}</TableCell>
+                <TableCell align="left" >{reclamation.description}</TableCell>
+                <TableCell align="left">{reclamation.etat}  <Button
+                  id="demo-positioned-button"
+                  aria-controls={open ? 'demo-positioned-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={(event) => handleClick(event, reclamation._id)}
+                >
+                  <Edit />
+                </Button>
+                  <Menu
+                    id="demo-positioned-menu"
+                    aria-labelledby="demo-positioned-button"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={() => setAnchorEl(null)}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }}
+                  >
+                    <MenuItem onClick={() => handleEtatUpdate(selectedReclamation._id, 'En Cour')}>En Cour</MenuItem>
+                    <MenuItem onClick={() => handleEtatUpdate(selectedReclamation._id, 'Traitée')}>Traitée</MenuItem>
+                    <MenuItem onClick={() => handleEtatUpdate(selectedReclamation._id, 'Annulée')}>Annullée</MenuItem>
+                  </Menu>
+                </TableCell>
                 <TableCell align="left">{reclamation.chauffeur?.nom} {reclamation.chauffeur?.prenom}</TableCell>
                 <TableCell align="left">
-                  <IconButton
-                    aria-label="edit"
-                    size="medium"
-                    onClick={() => {
-                      navigate(`/reclamations/edit/${reclamation._id}`)
-                    }}>
-                    <Edit />
-                  </IconButton>
                   <IconButton
                     aria-label="delete"
                     size="medium"
