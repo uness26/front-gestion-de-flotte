@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
-const Notification = ({ message, onClose }) => {
+const Notification = ({ message }) => {
     const [open, setOpen] = useState(true);
 
     const handleClose = () => {
         setOpen(false);
-        onClose();
     };
 
     return (

@@ -17,25 +17,23 @@ const NavbarRoot = styled(AppBar)(({ theme }) => ({
 }));
 
 export const Navbar = (props) => {
-  const { onSidebarOpen, ...other } = props;
+  const {onSidebarOpen, ...other } = props;
   const [user, setUser] = useState();
   const {Logout}=useAuth();
-  const [notification, setNotification] = useState(null); // Store the notification message here
-
+  const [notification, setNotification] = useState(null); 
   
   useEffect(() => {
-    // Listen to the 'addReclamation' event and show the notification
     socket.on('addReclamation', (matricule) => {
       const message = `New reclamation added for driver ${JSON.parse(matricule)}`;
       setNotification(message);
-    });
-    
-    socket.on('addReclamation', (matricule) => {
-      const message = `New reclamation added for driver ${JSON.parse(matricule)}`;
-      setNotification(message);
-    });
+    })
 
-  }, []);
+    socket.on('missionBegin', (data) => {
+      console.log(data)
+      const message = JSON.parse(data);
+      setNotification(message);
+    })
+  }, [socket]);
 
   useEffect(() => {
     getUserProfile()
@@ -85,12 +83,12 @@ export const Navbar = (props) => {
             <MenuIcon fontSize="small" />
           </IconButton>
           <Box sx={{ flexGrow: 1 }} />
-          {notification && <Notification message={notification} onClose={()=>{}} />}
+          {notification && <Notification message={notification} />}
           <Tooltip title="Notifications">
             <IconButton sx={{ ml: 1 }}
             onClick={closeNotification}
             >
-              <Badge badgeContent={notification ? 1 : 0} color="primary" variant="dot">
+              <Badge badgeContent={notification ? 2 : 0} color="primary" variant="dot">
                 <BellIcon fontSize="small" />
               </Badge>
             </IconButton>
@@ -119,5 +117,5 @@ export const Navbar = (props) => {
 };
 
  Navbar.propTypes = {
-   onSidebarOpen: PropTypes.func,
+   onSidebarOpen: PropTypes.func.isRequired,
  };

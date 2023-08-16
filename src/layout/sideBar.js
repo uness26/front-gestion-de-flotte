@@ -119,7 +119,7 @@ export const Sidebar = (props) => {
     return (
       <Drawer
         anchor="left"
-        open
+      open={open}
         PaperProps={{
           sx: {
             backgroundColor: 'neutral.900',
