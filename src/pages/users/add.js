@@ -45,22 +45,31 @@ export default function AddUser() {
         <>
             <Navbar />
             <Sidebar />
-            <title> AddUser </title>
+            <title> Chauffeurs </title>
             <Box
                 component="main"
                 sx={{
                     flexGrow: 1,
-                    py: 8,
+                    py: 5,
                 }}>
                 <Container maxWidth="lg">
-                    <Typography sx={{ mb: 3 }} variant="h4">
-                        Ajouter Chauffeur
-                    </Typography>
                     <form autoComplete="off" onSubmit={handleSubmit}>
-                        <Card>
+                        <Card >
+                            <CardHeader title=" Ajouter un Chauffeur" />
                             <Divider />
                             <CardContent>
                                 <Grid container spacing={3}>
+                                    <Grid item md={6} xs={12}>
+                                        <TextField
+                                            fullWidth
+                                            label="Matricule"
+                                            name="matricule"
+                                            onChange={handleChange}
+                                            required
+                                            value={user.matricule}
+                                            variant="outlined"
+                                        />
+                                    </Grid>
                                     <Grid item md={6} xs={12}>
                                         <TextField
                                             fullWidth
@@ -157,7 +166,7 @@ export default function AddUser() {
                             >
                                 <Button color="primary" variant="contained" type="submit" onClick={handleSubmit}>
 
-                                    Save
+                                    Enregistrer
                                 </Button>
                             </Box>
                         </Card>

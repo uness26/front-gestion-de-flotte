@@ -18,10 +18,21 @@ import { useNavigate } from 'react-router-dom';
 import { Layout } from "../../layout/layout";
 import { Sidebar } from '../../layout/sideBar';
 import { Navbar } from '../../layout/navBar';
+import SearchBar from '../../layout/searchBar'
+import ConfirmationDialog from '../../layout/confirmation_card';
 
 function Users() {
   const [listUsers, setListUsers] = useState([]);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
   const navigate = useNavigate()
+
+
+  const handleShowConfirmation = (id) => {
+    setSelectedId(id);
+    setShowConfirmation(true);
+  };
+
 
   useEffect(() => {
     getUsers()
@@ -46,8 +57,12 @@ function Users() {
 
   return (
     <>
+      <title>
+        Chauffeurs
+      </title>
       <Navbar />
       <Sidebar />
+      <SearchBar />
       <Box
         sx={{
           alignItems: "center",
@@ -57,17 +72,17 @@ function Users() {
           m: -1,
         }}
       >
-        <Typography sx={{ m: 1, margin: '1rem' }} variant="h4">
+        <Typography sx={{ m: 4, margin: '1rem' }} variant="h4">
           Chauffeurs
         </Typography>
-        <Box sx={{ m: 1 }}>
+        <Box sx={{ m: 4 }}>
           <Button
             color="primary"
             variant="contained"
             onClick={() => {
               navigate("add");
             }}>
-            Add new user
+            Ajouter un chauffeur
           </Button>
         </Box>
       </Box>
@@ -88,9 +103,9 @@ function Users() {
               <TableRow
                 key={user._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-               
+
                 <TableCell align="left">{user.matricule}</TableCell>
-                
+
                 <TableCell align="left">{user.nom} {user.prenom}</TableCell>
                 <TableCell align="left">{user.email}</TableCell>
                 <TableCell align="left">{user.CIN}</TableCell>
@@ -107,9 +122,7 @@ function Users() {
                   <IconButton
                     aria-label="delete"
                     size="medium"
-                    onClick={async () => {
-                      await handleDelete(user._id)
-                    }}>
+                    onClick={() => handleShowConfirmation(user._id)}>
                     <Delete />
                   </IconButton>
                 </TableCell>
@@ -118,6 +131,17 @@ function Users() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <ConfirmationDialog
+        open={showConfirmation}
+        title="chauffeur"
+        message="ce chauffeur"
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={async () => {
+          await handleDelete(selectedId);
+          setShowConfirmation(false);
+        }}
+      />
     </>
   )
 }

@@ -17,13 +17,21 @@ import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../../layout/sideBar';
 import { Navbar } from '../../layout/navBar';
 import SearchBar from '../../layout/searchBar'
+import ConfirmationDialog from '../../layout/confirmation_card';
 
 export default function Missions() {
   const [listMissions, setListMissions] = useState([]);
   const navigate = useNavigate()
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const handleShowConfirmation = (id) => {
+    setSelectedId(id);
+    setShowConfirmation(true);
+  };
 
   useEffect(() => {
-    getMissions()   
+    getMissions()
       .then((response) => {
         setListMissions(response.data)
         console.log(response.data)
@@ -44,8 +52,13 @@ export default function Missions() {
 
   return (
     <>
-    <Navbar />
-    <Sidebar />
+
+
+      <title>
+        Missions
+      </title>
+      <Navbar />
+      <Sidebar />
       <Box
         sx={{
           alignItems: "center",
@@ -55,18 +68,18 @@ export default function Missions() {
           m: -1,
         }}
       >
-      <SearchBar/>
+        <SearchBar />
         <Typography sx={{ m: 1 }} variant="h4">
           Missions
         </Typography>
-        <Box sx={{ m: 1 }}>
+        <Box sx={{ m: 4 }}>
           <Button
             color="primary"
             variant="contained"
             onClick={() => {
               navigate("/missions/add");
-            }}> 
-            Add new mission
+            }}>
+            Ajouter une mission
           </Button>
         </Box>
       </Box>
@@ -82,16 +95,17 @@ export default function Missions() {
               <TableCell align="left">Heure d'arrivée</TableCell>
               <TableCell align="left">Chauffeur</TableCell>
               <TableCell align="left">Véhicule</TableCell>
+              <TableCell align="left">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {listMissions.map((mission) => (
               <TableRow
                 key={mission._id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 }  }}>
-                
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+
                 <TableCell align="left" >{mission.date}</TableCell>
-                <TableCell align="left">{mission.etat}</TableCell>
+                <TableCell align="left" style={{ color: 'red' }}>{mission.etat}</TableCell>
                 <TableCell align="left">{mission.lieuDep}</TableCell>
                 <TableCell align="left">{mission.lieuArr}</TableCell>
                 <TableCell align="left">{mission.heureDep}</TableCell>
@@ -110,9 +124,7 @@ export default function Missions() {
                   <IconButton
                     aria-label="delete"
                     size="medium"
-                    onClick={async () => {
-                      await handleDelete(mission._id)
-                    }}>
+                    onClick={() => handleShowConfirmation(mission._id)}>
                     <Delete />
                   </IconButton>
                 </TableCell>
@@ -121,6 +133,17 @@ export default function Missions() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <ConfirmationDialog
+        open={showConfirmation}
+        title="mission"
+        message="cette mission"
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={async () => {
+          await handleDelete(selectedId);
+          setShowConfirmation(false);
+        }}
+      />
     </>
   )
 }

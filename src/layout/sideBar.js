@@ -8,6 +8,8 @@ import { User as UserIcon } from '../icons/user';
 import { Users as UsersIcon } from '../icons/users';
 import { Link } from 'react-router-dom';
 import * as PropTypes from 'prop-types'
+import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
+import NewReleasesIcon from '@mui/icons-material/NewReleases';
 
 const items = [
   {
@@ -17,7 +19,7 @@ const items = [
   },
   {
     href: '/reclamations',
-    icon: (<MenuIcon fontSize="small" />),
+    icon: (<NewReleasesIcon fontSize="small" />),
     title: 'Réclamations'
   },
   {
@@ -27,7 +29,7 @@ const items = [
   },
   {
     href: '/vehicules',
-    icon: (<MenuIcon fontSize="small" />),
+    icon: (<DirectionsBusIcon fontSize="small" />),
     title: 'Véhicules'
   },
   {

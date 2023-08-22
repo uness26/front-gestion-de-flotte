@@ -18,6 +18,9 @@ import { Navbar } from '../../layout/navBar';
 import MenuItem from '@mui/material/MenuItem';
 import socket from "../../contexts/socket_manager"
 import Menu from '@mui/material/Menu';
+import SearchBar from '../../layout/searchBar'
+import ConfirmationDialog from '../../layout/confirmation_card';
+
 
 
 export default function Reclamations() {
@@ -25,6 +28,13 @@ export default function Reclamations() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [selectedReclamation, setReclamation] = useState();
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const handleShowConfirmation = (id) => {
+    setSelectedId(id);
+    setShowConfirmation(true);
+  };
 
   useEffect(() => {
     getReclamations()
@@ -59,7 +69,7 @@ export default function Reclamations() {
           })
         );
         setAnchorEl(null);
-        socket.emit("editEtat", {selectedReclamation, newEtat})
+        socket.emit("editEtat", { selectedReclamation, newEtat })
       })
       .catch((err) => console.log(err));
   };
@@ -75,18 +85,20 @@ export default function Reclamations() {
 
   return (
     <>
+      <title>
+        Réclamations
+      </title>
       <Navbar />
       <Sidebar />
       <Box
         sx={{
           alignItems: "center",
-          display: "flex",
           justifyContent: "space-between",
-          flexWrap: "wrap",
           m: -1,
         }}
       >
-        <Typography sx={{ m: 1 }} variant="h4">
+        <SearchBar />
+        <Typography sx={{ m: 3 }} variant="h4">
           Reclamations
         </Typography>
       </Box>
@@ -106,7 +118,7 @@ export default function Reclamations() {
             {listReclamations.map((reclamation) => (
               <TableRow
                 key={reclamation._id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              >
 
                 <TableCell align="left">{reclamation.type}</TableCell>
                 <TableCell align="left">{reclamation.date}</TableCell>
@@ -145,9 +157,7 @@ export default function Reclamations() {
                   <IconButton
                     aria-label="delete"
                     size="medium"
-                    onClick={async () => {
-                      await handleDelete(reclamation._id)
-                    }}>
+                    onClick={() => handleShowConfirmation(reclamation._id)}>
                     <Delete />
                   </IconButton>
                 </TableCell>
@@ -155,7 +165,19 @@ export default function Reclamations() {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer >
+
+      <ConfirmationDialog
+        open={showConfirmation}
+        title="reclamation"
+        message="cette reclamation"
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={async () => {
+          await handleDelete(selectedId);
+          setShowConfirmation(false);
+        }}
+      />
+
     </>
   )
 }

@@ -29,7 +29,7 @@ export default function AddMission() {
     const [vehicules, setVehicules] = useState([]);
     const [chauffeurs, setChaffeurs] = useState([]);
     const [mission, setMission] = useState({});
-   
+
 
     useEffect(() => {
         getVehicules().then((response) => {
@@ -45,10 +45,10 @@ export default function AddMission() {
             .catch((error) => (console.error(error)))
     }, [])
 
-   
+
 
     const handleChangeDate = (newDate) => {
-      
+
         setMission({
             ...mission,
             date: newDate
@@ -82,9 +82,12 @@ export default function AddMission() {
 
     return (
         <>
-        <Navbar />
-        <Sidebar />
-            <title> AddMission </title>
+
+            <title>
+                Missions
+            </title>
+            <Navbar />
+            <Sidebar />
             <Box
                 component="main"
                 sx={{
@@ -92,12 +95,9 @@ export default function AddMission() {
                     py: 8,
                 }}>
                 <Container maxWidth="lg">
-                    <Typography sx={{ mb: 3 }} variant="h4">
-                        Add Mission
-                    </Typography>
                     <form autoComplete="off" onSubmit={handleSubmit}>
                         <Card>
-                            <CardHeader subheader="The information can be edited" title="Mission" />
+                            <CardHeader title="Ajouter une mission" />
                             <Divider />
                             <CardContent>
                                 <Grid container spacing={3}>
@@ -119,6 +119,7 @@ export default function AddMission() {
                                                 label="Heure de départ"
                                                 format="hh:mm"
                                                 name="heureDep"
+                                                ampm={false}
                                                 required
                                                 onChange={handleChangeTime}
                                                 variant="outlined"
@@ -188,8 +189,7 @@ export default function AddMission() {
                                 }}
                             >
                                 <Button color="primary" variant="contained" type="submit" onClick={handleSubmit}>
-
-                                    Save
+                                    Enregistrer
                                 </Button>
                             </Box>
                         </Card>

@@ -43,7 +43,7 @@ export default function AddVehicule() {
         <>
             <Navbar />
             <Sidebar />
-            <title> AddVehicule </title>
+            <title> Véhicules </title>
             <Box
                 component="main"
                 sx={{
@@ -51,12 +51,9 @@ export default function AddVehicule() {
                     py: 8,
                 }}>
                 <Container maxWidth="lg">
-                    <Typography sx={{ mb: 3 }} variant="h4">
-                        Add Vehicule
-                    </Typography>
                     <form autoComplete="off" onSubmit={handleSubmit}>
                         <Card>
-                            <CardHeader subheader="The information can be edited" title="Vehicule" />
+                            <CardHeader title="Ajouter une véhicule" />
                             <Divider />
                             <CardContent>
                                 <Grid container spacing={3}>
@@ -115,7 +112,7 @@ export default function AddVehicule() {
                                 }}
                             >
                                 <Button color="primary" variant="contained" type="submit" onClick={handleSubmit}>
-                                    Save
+                                    Enregistrer
                                 </Button>
                             </Box>
                         </Card>

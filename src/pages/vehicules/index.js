@@ -16,10 +16,19 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../../layout/sideBar';
 import { Navbar } from '../../layout/navBar';
+import SearchBar from '../../layout/searchBar'
+import ConfirmationDialog from '../../layout/confirmation_card';
 
 export default function Vehicules() {
   const [listVehicules, setListVehicules] = useState([]);
   const navigate = useNavigate()
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const handleShowConfirmation = (id) => {
+    setSelectedId(id);
+    setShowConfirmation(true);
+  };
 
   useEffect(() => {
     getVehicules()
@@ -45,6 +54,8 @@ export default function Vehicules() {
     <>
       <Navbar />
       <Sidebar />
+      <SearchBar />
+      <title> Véhicules</title>
       <Box
         sx={{
           alignItems: "center",
@@ -54,17 +65,17 @@ export default function Vehicules() {
           m: -1,
         }}
       >
-        <Typography sx={{ m: 1 }} variant="h4">
-          Vehicules
+        <Typography sx={{ m: 3 }} variant="h4">
+          Véhicules
         </Typography>
-        <Box sx={{ m: 1 }}>
+        <Box sx={{ m: 4 }}>
           <Button
             color="primary"
             variant="contained"
             onClick={() => {
               navigate("/vehicules/add");
             }}>
-            Add new vehicule
+            Ajouter une véhicule
           </Button>
         </Box>
       </Box>
@@ -72,9 +83,9 @@ export default function Vehicules() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
+              <TableCell align="center">Immatricule</TableCell>
               <TableCell align="center">Type</TableCell>
               <TableCell align="center">Marque</TableCell>
-              <TableCell align="center">Immatricule</TableCell>
               <TableCell align="center">Volume</TableCell>
               <TableCell align="center">Actions</TableCell>
             </TableRow>
@@ -84,9 +95,9 @@ export default function Vehicules() {
               <TableRow
                 key={vehicule._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell align="left">{vehicule.immatricule}</TableCell>
                 <TableCell align="left">{vehicule.type}</TableCell>
                 <TableCell align="left">{vehicule.marque}</TableCell>
-                <TableCell align="left">{vehicule.immatricule}</TableCell>
                 <TableCell align="left">{vehicule.volume}</TableCell>
                 <TableCell align="right">
                   <IconButton
@@ -100,9 +111,7 @@ export default function Vehicules() {
                   <IconButton
                     aria-label="delete"
                     size="medium"
-                    onClick={async () => {
-                      await handleDelete(vehicule._id)
-                    }}>
+                    onClick={() => handleShowConfirmation(vehicule._id)}>
                     <Delete />
                   </IconButton>
                 </TableCell>
@@ -111,6 +120,17 @@ export default function Vehicules() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <ConfirmationDialog
+        open={showConfirmation}
+        title="chauffeur"
+        message="ce chauffeur"
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={async () => {
+          await handleDelete(selectedId);
+          setShowConfirmation(false);
+        }}
+      />
     </>
   )
 }

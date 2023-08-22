@@ -67,7 +67,7 @@ export default function EditUser() {
         <>
             <Navbar />
             <Sidebar />
-            <title> EditVehicule </title>
+            <title> Véhicules </title>
             <Box
                 component="main"
                 sx={{
@@ -75,12 +75,9 @@ export default function EditUser() {
                     py: 8,
                 }}>
                 <Container maxWidth="lg">
-                    <Typography sx={{ mb: 3 }} variant="h4">
-                        Edit Véhicule
-                    </Typography>
                     <form autoComplete="off" onSubmit={handleSubmit}>
                         <Card>
-                            <CardHeader subheader="The informations can be edited" title="Vehicule" />
+                            <CardHeader title="Modifier cette véhicule" />
                             <Divider />
                             <CardContent>
                                 <Grid container spacing={3}>
@@ -139,7 +136,7 @@ export default function EditUser() {
                                 }}
                             >
                                 <Button color="primary" variant="contained" type="submit" onClick={handleSubmit}>
-                                    Save
+                                    Mettre à jour
                                 </Button>
                             </Box>
                         </Card>

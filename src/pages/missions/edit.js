@@ -111,6 +111,10 @@ export default function EditMission() {
 
     return (
         <>
+        
+    <title>
+    Missions
+    </title>
             <Navbar />
             <Sidebar />
             <Box
@@ -119,12 +123,10 @@ export default function EditMission() {
                     flexGrow: 1,
                     py: 8,
                 }}>
-                <Navbar />
-                <Sidebar />
                 <Container maxWidth="lg">
                     <form autoComplete="off" onSubmit={handleSubmit}>
                         <Card>
-                            <CardHeader subheader="The information can be edited" title="Mission" />
+                            <CardHeader title="Modifier la mission" />
                             <Divider />
                             <CardContent>
                                 <Grid container spacing={3}>
@@ -217,7 +219,7 @@ export default function EditMission() {
                                 }}
                             >
                                 <Button color="primary" variant="contained" type="submit" onClick={handleSubmit}>
-                                    Save
+                                    Mettre à jour
                                 </Button>
                             </Box>
                         </Card>

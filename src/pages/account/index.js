@@ -106,6 +106,9 @@ const Account = () => {
     return (
         <>
 
+            <title>
+                Profile
+            </title>
             <Box
                 component="main"
                 sx={{
@@ -117,7 +120,7 @@ const Account = () => {
                     <Stack spacing={3}>
                         <div>
                             <Typography variant="h4">
-                                Profile Adminstrateur
+                                Profile Administrateur
                             </Typography>
                         </div>
                         <div>
@@ -149,7 +152,7 @@ const Account = () => {
                                                         container
                                                         spacing={3}
                                                     >
-                                                    <Grid
+                                                        <Grid
                                                             xs={12}
                                                             md={6}
                                                         >
@@ -245,7 +248,7 @@ const Account = () => {
                                             <Divider />
                                             <CardActions sx={{ justifyContent: 'flex-end' }}>
                                                 <Button variant="contained" onClick={handleSubmit}>
-                                                    Save details
+                                                    Mettre à jour
                                                 </Button>
                                             </CardActions>
                                         </Card>
