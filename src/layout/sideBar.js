@@ -1,8 +1,6 @@
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
 import { Box, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
-import { Lock as LockIcon } from '../icons/lock';
-import { Selector as SelectorIcon } from '../icons/selector';
 import { Menu as MenuIcon } from '../icons/menu';
 import { User as UserIcon } from '../icons/user';
 import { Users as UsersIcon } from '../icons/users';

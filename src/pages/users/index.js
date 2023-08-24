@@ -9,13 +9,10 @@ import TableBody from '@mui/material/TableBody';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import { Delete, Edit } from "@mui/icons-material";
-import Divider from '@mui/material/Divider';
-import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import { Layout } from "../../layout/layout";
 import { Sidebar } from '../../layout/sideBar';
 import { Navbar } from '../../layout/navBar';
 import SearchBar from '../../layout/searchBar'

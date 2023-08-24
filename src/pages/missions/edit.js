@@ -1,5 +1,4 @@
 import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from 'react'
 import { updateMission, getMissionById } from '../../api/missions';
@@ -18,7 +17,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { getVehicules } from '../../api/vehicules';
-import { getUsers, getUserById } from '../../api/users';
+import { getUsers} from '../../api/users';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -31,7 +30,6 @@ export default function EditMission() {
     const [vehicules, setVehicules] = useState([]);
     const [chauffeurs, setChauffeurs] = useState([]);
     const navigate = useNavigate();
-    const [selectedChauffeur, setSelectedChauffeur] = useState(null);
 
 
 

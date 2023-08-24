@@ -4,7 +4,6 @@ import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useNavigate } from 'react-router-dom';
-import Typography from '@mui/material/Typography';
 
 const NotFound = () => {
         const navigate = useNavigate();

@@ -9,7 +9,6 @@ import TableBody from '@mui/material/TableBody';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import { Delete, Edit } from "@mui/icons-material";
-import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';

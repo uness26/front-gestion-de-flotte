@@ -2,7 +2,7 @@ import React from 'react'
 import * as Yup from "yup";
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from "formik";
-import { Box, Button, Container, Grid, TextField, Typography, Card, CardContent } from "@mui/material";
+import { Box, Button, Container, TextField, Typography, Card, CardContent } from "@mui/material";
 import toast, { Toaster } from "react-hot-toast";
 import { useAuth } from "../../contexts/auth";
 
@@ -10,7 +10,7 @@ import { useAuth } from "../../contexts/auth";
 
 export default function Login() {
   const navigate = useNavigate()
-  const { login, loading, isAuthenticated } = useAuth();
+  const { login } = useAuth();
 
 
   const formik = useFormik({
@@ -52,7 +52,7 @@ export default function Login() {
         }}
       >
         <Container maxWidth="sm">
-          <Card sx={{ marginTop: 4, padding: 4 ,backgroundColor: '#f0f8ff'}} elevation={5}>
+          <Card sx={{ marginTop: 4, padding: 4, backgroundColor: '#f0f8ff' }} elevation={5}>
             <CardContent>
               <form onSubmit={formik.handleSubmit}>
                 <Box sx={{ my: 4 }}>

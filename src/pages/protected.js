@@ -1,6 +1,5 @@
-import { Navigate, Outlet, useNavigate } from 'react-router-dom'
+import { Navigate} from 'react-router-dom'
 import { useAuth } from '../contexts/auth'
-import { useEffect } from 'react';
 
 
 export const Protected = ({ children }) => {

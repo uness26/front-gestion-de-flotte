@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { getUserProfile, updateUser } from '../../api/users';
 import { Sidebar } from '../../layout/sideBar';
 import { Navbar } from '../../layout/navBar';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
 import {
     InputLabel,
     Avatar,
@@ -16,7 +13,6 @@ import {
     Typography,
     CardActions,
     CardContent,
-    CardHeader,
     Divider,
     TextField,
     Unstable_Grid2 as Grid

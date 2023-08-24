@@ -1,5 +1,4 @@
 import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from 'react'
 import { updateUser, getUserById } from '../../api/users';
@@ -12,15 +11,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import { DateField } from '@mui/x-date-pickers/DateField';
-import dayjs from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { getVehicules } from '../../api/vehicules';
-import { getUsers } from '../../api/users';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import { Sidebar } from '../../layout/sideBar';
 import { Navbar } from '../../layout/navBar';
 
@@ -84,11 +75,11 @@ export default function EditUser() {
                 <Container maxWidth="lg">
                     <form autoComplete="off" onSubmit={handleSubmit}>
                         <Card>
-                        <CardHeader title="Modifier ce compte" />
+                            <CardHeader title="Modifier ce compte" />
                             <Divider />
                             <CardContent>
                                 <Grid container spacing={3}>
-                                <Grid item md={6} xs={12}>
+                                    <Grid item md={6} xs={12}>
                                         <InputLabel id="label">Matricule</InputLabel>
                                         <TextField
                                             fullWidth
